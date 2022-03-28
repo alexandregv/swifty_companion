@@ -31,6 +31,7 @@ class _SearchPageState extends State<SearchPage> {
             const Padding(
               padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
               child: TextField(
+                autofocus: true,
                 decoration: InputDecoration(
                   border: OutlineInputBorder(),
                   hintText: 'Enter a 42 student login',
