@@ -1,7 +1,4 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
-import 'package:english_words/english_words.dart';
 
 void main() {
   runApp(const App());
@@ -13,102 +10,66 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Swifty Companion',
+      title: 'Fluttery Companion',
       theme: ThemeData(
         primarySwatch: Colors.deepPurple,
       ),
-      home: const RandomWords(),
+      home: const SearchPage(),
     );
   }
 }
 
-class RandomWords extends StatefulWidget {
-  const RandomWords({Key? key}) : super(key: key);
+class SearchPage extends StatefulWidget {
+  const SearchPage({Key? key}) : super(key: key);
 
   @override
-  State<RandomWords> createState() => _RandomWordsState();
+  State<SearchPage> createState() => _SearchPageState();
 }
 
-class _RandomWordsState extends State<RandomWords> {
-  final _suggestions = <WordPair>[];
-  final _saved = <WordPair>{};
-  final _biggerFont = const TextStyle(fontSize: 18.0);
-
-  Widget _buildSuggestions() {
-    return ListView.builder(
-      padding: const EdgeInsets.all(16.0),
-      itemBuilder: (context, i) {
-        if (i.isOdd) return const Divider();
-
-        final index = i ~/ 2;
-        if (index >= _suggestions.length) {
-          _suggestions.addAll(generateWordPairs().take(10));
-        }
-        return _buildRow(_suggestions[index]);
-      },
-    );
-  }
-
-  Widget _buildRow(WordPair pair) {
-    final _alreadySaved = _saved.contains(pair);
-
-    return ListTile(
-      title: Text(
-        pair.asPascalCase,
-        style: _biggerFont,
-      ),
-      trailing: Icon(
-        _alreadySaved ? Icons.favorite : Icons.favorite_border,
-        color: _alreadySaved ? Colors.deepPurple : null,
-      ),
-      onTap: () => setState(() => _alreadySaved ? _saved.remove(pair) : _saved.add(pair)),
-    );
-  }
-
+class _SearchPageState extends State<SearchPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Startup Name Generator'),
+        title: const Text('Swifty Companion'),
         centerTitle: true,
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.list),
-            onPressed: _pushSaved,
+      ),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center, // Center vertically
+        crossAxisAlignment: CrossAxisAlignment.start, // Align to left
+        children: <Widget>[
+          const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+            child: Center(
+              child: Image(
+                image: AssetImage("assets/images/42paris.png"),
+                height: 150,
+              )
+            ),
+          ),
+          const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+            child: TextField(
+              decoration: InputDecoration(
+                border: OutlineInputBorder(),
+                hintText: 'Enter a 42 student login',
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+            child: ElevatedButton.icon(
+              onPressed: () {},
+              icon: const Icon(Icons.search),
+              label: const Text('Search'),
+              style: ElevatedButton.styleFrom(
+                minimumSize: const Size.fromHeight(40),
+              ),
+            ),
           ),
         ],
-      ),
-      body: _buildSuggestions(),
+      )
     );
   }
 
-  void _pushSaved() {
-   Navigator.of(context).push(
-     CupertinoPageRoute(
-       builder: (BuildContext context) {
-         final tiles = _saved.map(
-           (WordPair pair) {
-             return ListTile(
-               title: Text(
-                 pair.asPascalCase,
-                 style: _biggerFont,
-               ),
-             );
-           },
-         );
-         final divided = ListTile.divideTiles(
-           context: context,
-           tiles: tiles,
-         ).toList();
-
-         return Scaffold(
-           appBar: AppBar(
-             title: const Text('Saved Suggestions'),
-           ),
-           body: ListView(children: divided),
-         );
-       },
-     ),
-   );
-  }
 }
