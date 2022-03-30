@@ -14,6 +14,14 @@ class _SearchPageState extends State<SearchPage> {
         appBar: AppBar(
           title: const Text('Swifty Companion'),
           centerTitle: true,
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.info_outline),
+              onPressed: () {
+                Navigator.pushNamed(context, '/about');
+              },
+            ),
+          ],
         ),
         body: Column(
           mainAxisAlignment: MainAxisAlignment.center, // Center vertically

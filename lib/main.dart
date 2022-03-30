@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:swifty_companion/search.dart';
 
+import 'about.dart';
+
 void main() {
   runApp(const App());
 }
@@ -16,6 +18,10 @@ class App extends StatelessWidget {
         primarySwatch: Colors.deepPurple,
       ),
       home: const SearchPage(),
+      routes: {
+        '/search': (context) => SearchPage(),
+        '/about': (context) => AboutPage(),
+      },
     );
   }
 }
