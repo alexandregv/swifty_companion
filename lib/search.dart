@@ -12,7 +12,7 @@ class _SearchPageState extends State<SearchPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: const Text('Swifty Companion'),
+          title: const Text('Fluttery Companion'),
           centerTitle: true,
           actions: [
             IconButton(

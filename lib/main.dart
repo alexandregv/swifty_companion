@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:swifty_companion/search.dart';
 
+
 import 'about.dart';
+import 'login.dart';
 
 void main() {
   runApp(const App());
@@ -17,10 +19,10 @@ class App extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.deepPurple,
       ),
-      home: const SearchPage(),
       routes: {
-        '/search': (context) => SearchPage(),
-        '/about': (context) => AboutPage(),
+        '/': (context) => const LoginPage(),
+        '/search': (context) => const SearchPage(),
+        '/about': (context) => const AboutPage(),
       },
     );
   }
