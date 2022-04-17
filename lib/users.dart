@@ -19,8 +19,8 @@ class UsersPage extends StatefulWidget {
 }
 
 class _UsersPageState extends State<UsersPage> with LoadingMixin<UsersPage> {
-  late OAuth2Helper _helper;
-  late String _firstname = "Error";
+  late final OAuth2Helper _helper;
+  late final _user;
 
   final OAuth2Client client = OAuth2Client(
     authorizeUrl: 'https://api.intra.42.fr/oauth/authorize',
@@ -40,7 +40,7 @@ class _UsersPageState extends State<UsersPage> with LoadingMixin<UsersPage> {
 
     http.Response resp = await _helper.get("https://api.intra.42.fr/v2/users/${widget.login}");
     if (resp.statusCode == 200) {
-      _firstname = json.decode(resp.body)['usual_full_name'];
+      _user = json.decode(resp.body);
     } else if (resp.statusCode == 404) {
       throw Exception("User not found");
     } else {
@@ -119,9 +119,22 @@ class _UsersPageState extends State<UsersPage> with LoadingMixin<UsersPage> {
           mainAxisAlignment: MainAxisAlignment.center, // Center vertically
           crossAxisAlignment: CrossAxisAlignment.start, // Align to left
           children: <Widget>[
+            Image.network(_user['image_url']),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-              child: Text("User found: $_firstname"),
+              child: Text("Full name: ${_user['usual_full_name']}"),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+              child: Text("E-mail: ${_user['email']}"),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+              child: Text("Level: ${_user['cursus_users'][_user['cursus_users'].length - 1]['level']}"),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+              child: Text("Location: ${_user['location'] ?? 'Unavailable'}"),
             ),
           ],
         )
