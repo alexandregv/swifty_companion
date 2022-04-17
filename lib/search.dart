@@ -65,7 +65,10 @@ class _SearchPageState extends State<SearchPage> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
               child: ElevatedButton.icon(
-                onPressed: () => Navigator.pushNamed(context, '/users', arguments: loginFieldController.text),
+                onPressed: () {
+                  Navigator.pushNamed(context, '/users', arguments: loginFieldController.text);
+                  loginFieldController.clear();
+                },
                 icon: const Icon(Icons.search),
                 label: const Text('Search'),
                 style: ElevatedButton.styleFrom(
