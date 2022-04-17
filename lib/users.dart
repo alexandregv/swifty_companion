@@ -1,3 +1,4 @@
+import 'dart:collection';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -20,7 +21,7 @@ class UsersPage extends StatefulWidget {
 
 class _UsersPageState extends State<UsersPage> with LoadingMixin<UsersPage> {
   late final OAuth2Helper _helper;
-  late final _user;
+  late final User _user;
 
   final OAuth2Client client = OAuth2Client(
     authorizeUrl: 'https://api.intra.42.fr/oauth/authorize',
@@ -40,7 +41,7 @@ class _UsersPageState extends State<UsersPage> with LoadingMixin<UsersPage> {
 
     http.Response resp = await _helper.get("https://api.intra.42.fr/v2/users/${widget.login}");
     if (resp.statusCode == 200) {
-      _user = json.decode(resp.body);
+      _user = User.fromJson(json.decode(resp.body));
     } else if (resp.statusCode == 404) {
       throw Exception("User not found");
     } else {
@@ -101,6 +102,8 @@ class _UsersPageState extends State<UsersPage> with LoadingMixin<UsersPage> {
   }
 
   Widget buildUserFound(BuildContext context) {
+    final _primaryCursus = _user.cursusUsers.last;
+
     return DefaultTabController(
       length: 3,
       child: Scaffold(
@@ -119,26 +122,65 @@ class _UsersPageState extends State<UsersPage> with LoadingMixin<UsersPage> {
           mainAxisAlignment: MainAxisAlignment.center, // Center vertically
           crossAxisAlignment: CrossAxisAlignment.start, // Align to left
           children: <Widget>[
-            Image.network(_user['image_url']),
+            Image.network(_user.imageUrl),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-              child: Text("Full name: ${_user['usual_full_name']}"),
+              child: Text("Full name: ${_user.usualFullName}"),
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-              child: Text("E-mail: ${_user['email']}"),
+              child: Text("E-mail: ${_user.email}"),
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-              child: Text("Level: ${_user['cursus_users'][_user['cursus_users'].length - 1]['level']}"),
+              child: Text("Level: ${_primaryCursus['level']}"),
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-              child: Text("Location: ${_user['location'] ?? 'Unavailable'}"),
+              child: Text("Location: ${_user.location}"),
             ),
           ],
         )
       ),
     );
+  }
+}
+
+class User {
+  final String login;
+  final String firstname;
+  final String lastname;
+  final String usualFirstName;
+  final String usualFullName;
+  final String email;
+  final String location;
+  final String imageUrl;
+  final String newImageUrl;
+  final List<dynamic> cursusUsers;
+
+  User({required this.login, required this.firstname, required this.lastname, required this.usualFirstName , required this.usualFullName, required this.email, required this.location, required this.imageUrl, required this.newImageUrl, required this.cursusUsers});
+
+  factory User.fromJson(Map<String, dynamic> json) {
+    User user = User(
+      login: json["login"],
+      firstname: json["first_name"],
+      lastname: json["last_name"],
+      usualFirstName: json["usual_first_name"] ?? json["first_name"],
+      usualFullName: json["usual_full_name"],
+      email: json["email"],
+      location: json["location"] ?? 'Unavailable',
+      imageUrl: json["image_url"],
+      newImageUrl: json["new_image_url"],
+      cursusUsers: json["cursus_users"],
+    );
+
+    user.cursusUsers.sort((a, b) => a['id'].compareTo(b['id']));
+
+    return user;
+  }
+
+  @override
+  String toString() {
+    return 'User: $login $usualFullName $email';
   }
 }
