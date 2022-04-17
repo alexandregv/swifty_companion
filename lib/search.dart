@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({Key? key}) : super(key: key);
@@ -51,6 +52,9 @@ class _SearchPageState extends State<SearchPage> {
                 controller: loginFieldController,
                 textInputAction: TextInputAction.search,
                 onSubmitted: (String login) => Navigator.pushNamed(context, '/users', arguments: login),
+                inputFormatters: [
+                  FilteringTextInputFormatter(RegExp(r'[a-zA-Z0-9\-]'), allow: true)
+                ],
                 autofocus: true,
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(),
