@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:oauth2_client/oauth2_client.dart';
 import 'package:oauth2_client/oauth2_helper.dart';
-import 'package:http/http.dart' as http;
 import 'package:swifty_companion/search.dart';
 
 class LoginPage extends StatefulWidget {

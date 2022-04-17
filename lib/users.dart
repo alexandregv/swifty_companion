@@ -1,4 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:oauth2_client/oauth2_client.dart';
+import 'package:oauth2_client/oauth2_helper.dart';
+import 'package:http/http.dart' as http;
 
 class UsersPage extends StatefulWidget {
   final String login;
@@ -13,9 +18,49 @@ class UsersPage extends StatefulWidget {
 }
 
 class _UsersPageState extends State<UsersPage> {
+  late OAuth2Helper helper;
+  late String firstname = "Error";
+
+  final OAuth2Client client = OAuth2Client(
+    authorizeUrl: 'https://api.intra.42.fr/oauth/authorize',
+    tokenUrl: 'https://api.intra.42.fr/oauth/token',
+    redirectUri: 'my.flutterycompanion://oauth2redirect',
+    customUriScheme: 'my.flutterycompanion',
+  );
+
+  void _getUser() async {
+    http.Response resp = await helper.get("https://api.intra.42.fr/v2/users/${widget.login}");
+    setState(() {
+      print(resp.statusCode);
+      print(resp.body);
+      if (resp.statusCode == 200) {
+        firstname = json.decode(resp.body)['first_name'];
+      } else {
+        firstname = "Error";
+      }
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    client.accessTokenRequestHeaders = {'Accept': 'application/json'};
+    helper = OAuth2Helper(client,
+        grantType: OAuth2Helper.AUTHORIZATION_CODE,
+        clientId: '<API_APP_CLIENT_ID>',
+        clientSecret: '<API_APP_CLIENT_SECRET>',
+        scopes: ['public', 'profile', 'projects']
+    );
+    _getUser();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return buildUserNotFound(context);
+    if (firstname == "Error") {
+      return buildUserNotFound(context);
+    } else {
+      return buildUserFound(context);
+    }
   }
 
   Widget buildUserNotFound(BuildContext context) {
