@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:swifty_companion/search.dart';
 
@@ -19,10 +20,19 @@ class App extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.deepPurple,
       ),
-      routes: {
-        '/': (context) => const LoginPage(),
-        '/search': (context) => const SearchPage(),
-        '/about': (context) => const AboutPage(),
+      //routes: {
+      //  '/': (context) => const LoginPage(),
+      //  '/search': (context) => const SearchPage(),
+      //  '/about': (context) => const AboutPage(),
+      //},
+      onGenerateRoute: (RouteSettings settings) {
+        late StatefulWidget page;
+        switch (settings.name) {
+          case '/': page = const LoginPage(); break;
+          case '/search': page = const SearchPage(); break;
+          case '/about': page = const AboutPage(); break;
+        }
+        return CupertinoPageRoute(builder: (_) => page, settings: settings);
       },
     );
   }
