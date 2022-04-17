@@ -121,19 +121,19 @@ class _UsersPageState extends State<UsersPage> with LoadingMixin<UsersPage> {
           children: <Widget>[
             Image.network(_user['image_url']),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
               child: Text("Full name: ${_user['usual_full_name']}"),
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
               child: Text("E-mail: ${_user['email']}"),
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
               child: Text("Level: ${_user['cursus_users'][_user['cursus_users'].length - 1]['level']}"),
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
               child: Text("Location: ${_user['location'] ?? 'Unavailable'}"),
             ),
           ],
