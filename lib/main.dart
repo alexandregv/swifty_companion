@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:swifty_companion/search.dart';
+import 'package:swifty_companion/users.dart';
 
 
 import 'about.dart';
@@ -26,13 +27,13 @@ class App extends StatelessWidget {
       //  '/about': (context) => const AboutPage(),
       //},
       onGenerateRoute: (RouteSettings settings) {
-        late StatefulWidget page;
         switch (settings.name) {
-          case '/': page = const LoginPage(); break;
-          case '/search': page = const SearchPage(); break;
-          case '/about': page = const AboutPage(); break;
+          case '/':return CupertinoPageRoute(builder: (_) => const LoginPage(), settings: settings);
+          case '/search': return CupertinoPageRoute(builder: (_) => const SearchPage(), settings: settings);
+          case '/about': return CupertinoPageRoute(builder: (_) => const AboutPage(), settings: settings);
+          case '/users': return CupertinoPageRoute(builder: (_) => UsersPage(login: settings.arguments as String,), settings: settings);
+          default: return CupertinoPageRoute(builder: (_) => const LoginPage(), settings: settings);
         }
-        return CupertinoPageRoute(builder: (_) => page, settings: settings);
       },
     );
   }

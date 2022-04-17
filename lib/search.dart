@@ -8,6 +8,15 @@ class SearchPage extends StatefulWidget {
 }
 
 class _SearchPageState extends State<SearchPage> {
+  final loginFieldController= TextEditingController();
+
+  @override
+  void dispose() {
+    // Clean up the controller when the widget is disposed.
+    loginFieldController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,11 +45,14 @@ class _SearchPageState extends State<SearchPage> {
                   )
               ),
             ),
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
               child: TextField(
+                controller: loginFieldController,
+                textInputAction: TextInputAction.search,
+                onSubmitted: (String login) => Navigator.pushNamed(context, '/users', arguments: login),
                 autofocus: true,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   border: OutlineInputBorder(),
                   hintText: 'Enter a 42 student login',
                 ),
@@ -49,7 +61,7 @@ class _SearchPageState extends State<SearchPage> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
               child: ElevatedButton.icon(
-                onPressed: () {},
+                onPressed: () => Navigator.pushNamed(context, '/users', arguments: loginFieldController.text),
                 icon: const Icon(Icons.search),
                 label: const Text('Search'),
                 style: ElevatedButton.styleFrom(
