@@ -3,12 +3,13 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:oauth2_client/oauth2_client.dart';
 import 'package:oauth2_client/oauth2_helper.dart';
+import 'package:loader/loader.dart';
 import 'package:http/http.dart' as http;
 
 class UsersPage extends StatefulWidget {
   final String login;
 
-  UsersPage({
+  const UsersPage({
     Key? key,
     required this.login,
   }) : super(key: key);
@@ -17,9 +18,9 @@ class UsersPage extends StatefulWidget {
   State<UsersPage> createState() => _UsersPageState();
 }
 
-class _UsersPageState extends State<UsersPage> {
-  late OAuth2Helper helper;
-  late String firstname = "Error";
+class _UsersPageState extends State<UsersPage> with LoadingMixin<UsersPage> {
+  late OAuth2Helper _helper;
+  late String _firstname = "Error";
 
   final OAuth2Client client = OAuth2Client(
     authorizeUrl: 'https://api.intra.42.fr/oauth/authorize',
@@ -28,39 +29,46 @@ class _UsersPageState extends State<UsersPage> {
     customUriScheme: 'my.flutterycompanion',
   );
 
-  void _getUser() async {
-    http.Response resp = await helper.get("https://api.intra.42.fr/v2/users/${widget.login}");
-    setState(() {
-      print(resp.statusCode);
-      print(resp.body);
-      if (resp.statusCode == 200) {
-        firstname = json.decode(resp.body)['first_name'];
-      } else {
-        firstname = "Error";
-      }
-    });
-  }
-
   @override
-  void initState() {
-    super.initState();
-    client.accessTokenRequestHeaders = {'Accept': 'application/json'};
-    helper = OAuth2Helper(client,
+  Future<void> load() async {
+    _helper = OAuth2Helper(client,
         grantType: OAuth2Helper.AUTHORIZATION_CODE,
         clientId: '<API_APP_CLIENT_ID>',
         clientSecret: '<API_APP_CLIENT_SECRET>',
         scopes: ['public', 'profile', 'projects']
     );
-    _getUser();
+
+    http.Response resp = await _helper.get("https://api.intra.42.fr/v2/users/${widget.login}");
+    if (resp.statusCode == 200) {
+      _firstname = json.decode(resp.body)['usual_full_name'];
+    } else if (resp.statusCode == 404) {
+      throw Exception("User not found");
+    } else {
+      throw Exception("Error retrieving user");
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    if (firstname == "Error") {
+    if (loading) {
+      return buildLoader(context);
+    } else if (hasError) {
       return buildUserNotFound(context);
     } else {
       return buildUserFound(context);
     }
+  }
+
+  Widget buildLoader(BuildContext context) {
+   return Scaffold(
+     appBar: AppBar(
+       title: Text(widget.login),
+       centerTitle: true,
+     ),
+     body: const Center(
+       child: CircularProgressIndicator(),
+     ),
+   );
   }
 
   Widget buildUserNotFound(BuildContext context) {
@@ -113,7 +121,7 @@ class _UsersPageState extends State<UsersPage> {
           children: <Widget>[
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-              child: Text("Test: ${widget.login}"),
+              child: Text("User found: $_firstname"),
             ),
           ],
         )

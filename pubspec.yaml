@@ -37,6 +37,7 @@ dependencies:
   english_words: ^4.0.0
   package_info_plus: ^1.4.0
   oauth2_client: ^2.3.3
+  loader: ^1.0.0
 
 dev_dependencies:
   flutter_test:
