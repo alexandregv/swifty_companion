@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:oauth2_client/oauth2_client.dart';
 import 'package:oauth2_client/oauth2_helper.dart';
 import 'package:http/http.dart' as http;
+import 'package:swifty_companion/search.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -43,6 +44,10 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    if (_tokenInfo != 'Waiting...')  {
+      return const SearchPage();
+    }
+
     return Scaffold(
         appBar: AppBar(
           title: const Text('OAuth'),
