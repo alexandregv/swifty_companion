@@ -291,3 +291,29 @@ class User {
     return 'User: $login $usualFullName $email';
   }
 }
+
+class ProjectUser {
+  final int id;
+  final int occurrence;
+  final int finalMark;
+  final String status;
+  final List<dynamic> project;
+
+  ProjectUser({required this.id, required this.occurrence, required this.finalMark, required this.status, required this.project});
+
+  factory ProjectUser.fromJson(Map<String, dynamic> json) {
+    ProjectUser projectUser = ProjectUser(
+      id: json["id"],
+      occurrence: json["occurrence"],
+      finalMark: json["final_mark"],
+      status: json["status"],
+      project: json["project"],
+    );
+    return projectUser;
+  }
+
+  @override
+  String toString() {
+    return 'ProjectUser: $id $status';
+  }
+}
