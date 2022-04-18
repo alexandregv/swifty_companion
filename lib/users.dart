@@ -127,7 +127,7 @@ class _UsersPageState extends State<UsersPage> with LoadingMixin<UsersPage> {
             physics: const NeverScrollableScrollPhysics(),
             children: [
               Tab1(helper: _helper, login: widget.login, user: _user),
-              Tab2(helper: _helper, login: widget.login, user: _user),
+              Tab2(helper: _helper, login: widget.login),
               buildTab3(context),
             ],
           ),
@@ -219,13 +219,11 @@ class _Tab1State extends State<Tab1> with AutomaticKeepAliveClientMixin<Tab1>{
 class Tab2 extends StatefulWidget {
   final OAuth2Helper helper;
   final String login;
-  final User user;
 
   const Tab2({
     Key? key,
     required this.helper,
     required this.login,
-    required this.user,
   }) : super(key: key);
 
   @override
@@ -233,7 +231,6 @@ class Tab2 extends StatefulWidget {
 }
 
 class _Tab2State extends State<Tab2> with LoadingMixin<Tab2>, AutomaticKeepAliveClientMixin<Tab2>{
-  late final User _user;
   late final List<ProjectUser> _projectsUsers = [];
 
   @override
@@ -242,7 +239,6 @@ class _Tab2State extends State<Tab2> with LoadingMixin<Tab2>, AutomaticKeepAlive
   @override
   void initState() {
     super.initState();
-    _user = widget.user;
   }
 
   @override
