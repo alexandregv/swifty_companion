@@ -121,6 +121,7 @@ class _UsersPageState extends State<UsersPage> with LoadingMixin<UsersPage> {
         ),
         resizeToAvoidBottomInset: false,
           body: TabBarView(
+            physics: const NeverScrollableScrollPhysics(),
             children: [
               Tab1(helper: _helper, login: widget.login, user: _user),
               Tab2(helper: _helper, login: widget.login, user: _user),
@@ -244,7 +245,6 @@ class _Tab2State extends State<Tab2> with LoadingMixin<Tab2>, AutomaticKeepAlive
   @override
   Future<void> load() async {
     http.Response resp = await widget.helper.get("https://api.intra.42.fr/v2/users/${widget.login}/projects_users");
-    print(resp.statusCode);
     if (resp.statusCode == 200) {
       setState(() {
         for (Map<String, dynamic> projectUser in json.decode(resp.body)) {
