@@ -3,7 +3,7 @@ import 'package:swifty_companion/models/project.dart';
 class ProjectUser {
   final int id;
   final int occurrence;
-  final String finalMark;
+  final int finalMark;
   final String status;
   final Project project;
 
@@ -12,8 +12,8 @@ class ProjectUser {
   factory ProjectUser.fromJson(Map<String, dynamic> json) {
     ProjectUser projectUser = ProjectUser(
       id: json["id"],
-      occurrence: json["occurrence"] ?? '0',
-      finalMark: json["final_mark"]?.toString() ?? 'No mark yet',
+      occurrence: json["occurrence"] ?? 0,
+      finalMark: json["final_mark"] ?? 0,
       status: json["status"] ?? 'Unknown',
       project: Project.fromJson(json["project"]),
     );

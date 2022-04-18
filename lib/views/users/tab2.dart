@@ -34,7 +34,7 @@ class _Tab2State extends State<Tab2> with LoadingMixin<Tab2>, AutomaticKeepAlive
 
   @override
   Future<void> load() async {
-    http.Response resp = await widget.helper.get("https://api.intra.42.fr/v2/users/${widget.login}/projects_users");
+    http.Response resp = await widget.helper.get("https://api.intra.42.fr/v2/users/${widget.login}/projects_users?page[size]=100"); //TODO: Get all pages
     if (resp.statusCode == 200) {
       setState(() {
         for (Map<String, dynamic> projectUser in json.decode(resp.body)) {
@@ -75,14 +75,24 @@ class _Tab2State extends State<Tab2> with LoadingMixin<Tab2>, AutomaticKeepAlive
               _projectsUsers.sort((a, b) => a.id.compareTo(b.id));
               return <Widget>[
                 for (ProjectUser projectUser in _projectsUsers)
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-                    child: Text("${projectUser.project.name}: ${projectUser.status} ${projectUser.finalMark}"),
-                  ),
+                  projectInfo(context, projectUser),
               ];
             }
           }(),
         )
+    );
+  }
+
+  Padding projectInfo(BuildContext context, ProjectUser projectUser) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+      child: () {
+        if (projectUser.status == 'finished') {
+          return Text("${projectUser.project.name}: ${projectUser.finalMark}/100");
+        } else {
+          return Text("${projectUser.project.name}: ${projectUser.status}");
+        }
+      }(),
     );
   }
 }
