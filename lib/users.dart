@@ -66,6 +66,7 @@ class _UsersPageState extends State<UsersPage> with LoadingMixin<UsersPage> {
        title: Text(widget.login),
        centerTitle: true,
      ),
+     resizeToAvoidBottomInset: false,
      body: const Center(
        child: CircularProgressIndicator(),
      ),
@@ -78,6 +79,7 @@ class _UsersPageState extends State<UsersPage> with LoadingMixin<UsersPage> {
             title: Text(widget.login),
             centerTitle: true,
           ),
+          resizeToAvoidBottomInset: false,
           body: Column(
             mainAxisAlignment: MainAxisAlignment.center, // Center vertically
             crossAxisAlignment: CrossAxisAlignment.start, // Align to left
@@ -118,6 +120,7 @@ class _UsersPageState extends State<UsersPage> with LoadingMixin<UsersPage> {
             ],
           ),
         ),
+        resizeToAvoidBottomInset: false,
         body: Column(
           mainAxisAlignment: MainAxisAlignment.center, // Center vertically
           crossAxisAlignment: CrossAxisAlignment.start, // Align to left
