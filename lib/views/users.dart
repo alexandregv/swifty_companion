@@ -6,8 +6,8 @@ import 'package:oauth2_client/oauth2_helper.dart';
 import 'package:loader/loader.dart';
 import 'package:http/http.dart' as http;
 
-import 'models/project_user.dart';
-import 'models/user.dart';
+import '../models/project_user.dart';
+import '../models/user.dart';
 
 class UsersPage extends StatefulWidget {
   final String login;

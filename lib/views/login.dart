@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:oauth2_client/oauth2_client.dart';
 import 'package:oauth2_client/oauth2_helper.dart';
-import 'package:swifty_companion/search.dart';
+import 'package:swifty_companion/views/search.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);

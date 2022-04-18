@@ -1,11 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:swifty_companion/search.dart';
-import 'package:swifty_companion/users.dart';
+import 'package:swifty_companion/views/search.dart';
+import 'package:swifty_companion/views/users.dart';
 
 
-import 'about.dart';
-import 'login.dart';
+import 'views/about.dart';
+import 'views/login.dart';
 
 void main() {
   runApp(const App());
