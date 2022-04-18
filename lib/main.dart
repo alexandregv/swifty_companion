@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:swifty_companion/views/search.dart';
-import 'package:swifty_companion/views/users.dart';
+import 'package:swifty_companion/views/users/users.dart';
 
 
 import 'views/about.dart';
