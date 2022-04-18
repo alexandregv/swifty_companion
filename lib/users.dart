@@ -132,33 +132,39 @@ class _UsersPageState extends State<UsersPage> with LoadingMixin<UsersPage> {
           ),
         ),
         resizeToAvoidBottomInset: false,
-        body: Column(
-          mainAxisAlignment: MainAxisAlignment.center, // Center vertically
-          crossAxisAlignment: CrossAxisAlignment.start, // Align to left
-          children: <Widget>[
-            Image.network(_user.imageUrl),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-              child: Text("Full name: ${_user.usualFullName}"),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-              child: Text("E-mail: ${_user.email}"),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-              child: Text("Level: ${_primaryCursus['level']}"),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-              child: Text("Location: ${_user.location}"),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-              child: Text("Pool: $_pool"),
-            ),
-          ],
-        )
+          body: TabBarView(
+            children: [
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center, // Center vertically
+                crossAxisAlignment: CrossAxisAlignment.start, // Align to left
+                children: <Widget>[
+                  Image.network(_user.imageUrl),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+                    child: Text("Full name: ${_user.usualFullName}"),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+                    child: Text("E-mail: ${_user.email}"),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+                    child: Text("Level: ${_primaryCursus['level']}"),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+                    child: Text("Location: ${_user.location}"),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+                    child: Text("Pool: $_pool"),
+                  ),
+                ],
+              ),
+              const Icon(Icons.commit),
+              const Icon(Icons.stacked_bar_chart),
+            ],
+          ),
       ),
     );
   }
