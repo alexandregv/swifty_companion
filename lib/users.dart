@@ -272,25 +272,27 @@ class _Tab2State extends State<Tab2> with LoadingMixin<Tab2>, AutomaticKeepAlive
   }
 
   Widget buildBody(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center, // Center vertically
-      crossAxisAlignment: CrossAxisAlignment.start, // Align to left
-      children: () {
-        if (_projectsUsers.isEmpty) {
-          return <Widget>[
-            const Center(child: Text('User has no projects')),
-          ];
-        } else {
-          _projectsUsers.sort((a, b) => a.id.compareTo(b.id));
-          return <Widget>[
-            for (ProjectUser projectUser in _projectsUsers)
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-                child: Text("${projectUser.id}: ${projectUser.finalMark}"),
-              ),
-          ];
-        }
-      }(),
+    return SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center, // Center vertically
+          crossAxisAlignment: CrossAxisAlignment.start, // Align to left
+          children: () {
+            if (_projectsUsers.isEmpty) {
+              return <Widget>[
+                const Center(child: Text('User has no projects')),
+              ];
+            } else {
+              _projectsUsers.sort((a, b) => a.id.compareTo(b.id));
+              return <Widget>[
+                for (ProjectUser projectUser in _projectsUsers)
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+                    child: Text("${projectUser.id}: ${projectUser.finalMark}"),
+                  ),
+              ];
+            }
+          }(),
+        )
     );
   }
 }
