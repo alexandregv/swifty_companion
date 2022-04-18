@@ -123,8 +123,7 @@ class _UsersPageState extends State<UsersPage> with LoadingMixin<UsersPage> {
           body: TabBarView(
             children: [
               Tab1(helper: _helper, login: widget.login, user: _user),
-              //buildTab1(context, _level, _pool),
-              buildTab2(context),
+              Tab2(helper: _helper, user: _user),
               buildTab3(context),
             ],
           ),
@@ -209,6 +208,45 @@ class _Tab1State extends State<Tab1> with AutomaticKeepAliveClientMixin<Tab1>{
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
       child: Text("$key: $value"),
+    );
+  }
+}
+
+class Tab2 extends StatefulWidget {
+  final OAuth2Helper helper;
+  final User user;
+
+  const Tab2({
+    Key? key,
+    required this.helper,
+    required this.user,
+  }) : super(key: key);
+
+  @override
+  State<Tab2> createState() => _Tab2State();
+}
+
+class _Tab2State extends State<Tab2> with AutomaticKeepAliveClientMixin<Tab2>{
+  late final User _user;
+
+  @override
+  bool get wantKeepAlive => true;
+
+  @override
+  void initState() {
+    super.initState();
+    _user = widget.user;
+  }
+  @override
+  Widget build(BuildContext context) {
+    super.build(context);
+
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center, // Center vertically
+      crossAxisAlignment: CrossAxisAlignment.start, // Align to left
+      children: <Widget>[
+        Text('Pool month ' + _user.poolMonth),
+      ],
     );
   }
 }
