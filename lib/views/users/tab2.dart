@@ -77,7 +77,7 @@ class _Tab2State extends State<Tab2> with LoadingMixin<Tab2>, AutomaticKeepAlive
                 for (ProjectUser projectUser in _projectsUsers)
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-                    child: Text("${projectUser.id}: ${projectUser.finalMark}"),
+                    child: Text("${projectUser.project.name}: ${projectUser.status} ${projectUser.finalMark}"),
                   ),
               ];
             }
