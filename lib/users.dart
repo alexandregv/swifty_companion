@@ -123,7 +123,7 @@ class _UsersPageState extends State<UsersPage> with LoadingMixin<UsersPage> {
           body: TabBarView(
             children: [
               Tab1(helper: _helper, login: widget.login, user: _user),
-              Tab2(helper: _helper, user: _user),
+              Tab2(helper: _helper, login: widget.login, user: _user),
               buildTab3(context),
             ],
           ),
@@ -214,11 +214,13 @@ class _Tab1State extends State<Tab1> with AutomaticKeepAliveClientMixin<Tab1>{
 
 class Tab2 extends StatefulWidget {
   final OAuth2Helper helper;
+  final String login;
   final User user;
 
   const Tab2({
     Key? key,
     required this.helper,
+    required this.login,
     required this.user,
   }) : super(key: key);
 
@@ -226,8 +228,9 @@ class Tab2 extends StatefulWidget {
   State<Tab2> createState() => _Tab2State();
 }
 
-class _Tab2State extends State<Tab2> with AutomaticKeepAliveClientMixin<Tab2>{
+class _Tab2State extends State<Tab2> with LoadingMixin<Tab2>, AutomaticKeepAliveClientMixin<Tab2>{
   late final User _user;
+  late final List<ProjectUser> _projectsUsers = [];
 
   @override
   bool get wantKeepAlive => true;
@@ -237,16 +240,49 @@ class _Tab2State extends State<Tab2> with AutomaticKeepAliveClientMixin<Tab2>{
     super.initState();
     _user = widget.user;
   }
+
+  @override
+  Future<void> load() async {
+    http.Response resp = await widget.helper.get("https://api.intra.42.fr/v2/users/${widget.login}/projects_users");
+    print(resp.statusCode);
+    if (resp.statusCode == 200) {
+      setState(() {
+        for (Map<String, dynamic> projectUser in json.decode(resp.body)) {
+          _projectsUsers.add(ProjectUser.fromJson(projectUser));
+        }
+      });
+    } else if (resp.statusCode == 404) {
+      throw Exception("ProjectUsers not found");
+    } else {
+      throw Exception("Error retrieving user's projects");
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     super.build(context);
 
+    if (loading) {
+      return const Center(child: CircularProgressIndicator());
+    } else if (hasError) {
+      return Center(child: Text('Error PU ' + error.toString()));
+    } else {
+      return buildBody(context);
+    }
+  }
+
+  Widget buildBody(BuildContext context) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center, // Center vertically
       crossAxisAlignment: CrossAxisAlignment.start, // Align to left
-      children: <Widget>[
-        Text('Pool month ' + _user.poolMonth),
-      ],
+      children: () {
+        List<Widget> widgets = [];
+        _projectsUsers.sort((a, b) => a.id.compareTo(b.id));
+        for (ProjectUser projectUser in _projectsUsers) {
+          widgets.add(Text("${projectUser.id}: ${projectUser.finalMark}"));
+        }
+        return widgets;
+      }(),
     );
   }
 }
@@ -297,17 +333,15 @@ class ProjectUser {
   final int occurrence;
   final int finalMark;
   final String status;
-  final List<dynamic> project;
 
-  ProjectUser({required this.id, required this.occurrence, required this.finalMark, required this.status, required this.project});
+  ProjectUser({required this.id, required this.occurrence, required this.finalMark, required this.status});
 
   factory ProjectUser.fromJson(Map<String, dynamic> json) {
     ProjectUser projectUser = ProjectUser(
       id: json["id"],
-      occurrence: json["occurrence"],
-      finalMark: json["final_mark"],
-      status: json["status"],
-      project: json["project"],
+      occurrence: json["occurrence"] ?? '0',
+      finalMark: json["final_mark"] ?? 338,
+      status: json["status"] ?? 'Unknown',
     );
     return projectUser;
   }
