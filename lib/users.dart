@@ -1,4 +1,3 @@
-import 'dart:collection';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -135,44 +134,48 @@ class _UsersPageState extends State<UsersPage> with LoadingMixin<UsersPage> {
         resizeToAvoidBottomInset: false,
           body: TabBarView(
             children: [
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center, // Center vertically
-                crossAxisAlignment: CrossAxisAlignment.start, // Align to left
-                children: <Widget>[
-                  Image.network(
-                    _user.imageUrl,
-                    errorBuilder: (_, __, ___) {
-                      return Image.network('https://cdn.intra.42.fr/users/default.jpg'); //this is what will fill the Container in case error happened
-                    },
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-                    child: Text("Full name: ${_user.usualFullName}"),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-                    child: Text("E-mail: ${_user.email}"),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-                    child: Text("Level: ${_level}"),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-                    child: Text("Location: ${_user.location}"),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-                    child: Text("Pool: $_pool"),
-                  ),
-                ],
-              ),
-              const Icon(Icons.commit),
-              const Icon(Icons.stacked_bar_chart),
+              buildTab1(context, _level, _pool),
+              buildTab2(context),
+              buildTab3(context),
             ],
           ),
       ),
     );
+  }
+
+  Padding userInfo(String key, String value) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+      child: Text("$key: $value"),
+    );
+  }
+
+  Widget buildTab1(BuildContext context, String level, String pool) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center, // Center vertically
+      crossAxisAlignment: CrossAxisAlignment.start, // Align to left
+      children: <Widget>[
+        Image.network(
+          _user.imageUrl,
+          errorBuilder: (_, __, ___) {
+            return Image.network('https://cdn.intra.42.fr/users/default.jpg');
+          },
+        ),
+        userInfo('Full name', _user.usualFullName),
+        userInfo('E-mail', _user.email),
+        userInfo('Level', level),
+        userInfo('Location', _user.location),
+        userInfo('Pool', pool),
+      ],
+    );
+  }
+
+  Widget buildTab2(BuildContext context) {
+    return const Icon(Icons.commit);
+  }
+
+  Widget buildTab3(BuildContext context) {
+    return const Icon(Icons.stacked_bar_chart);
   }
 }
 
