@@ -276,12 +276,20 @@ class _Tab2State extends State<Tab2> with LoadingMixin<Tab2>, AutomaticKeepAlive
       mainAxisAlignment: MainAxisAlignment.center, // Center vertically
       crossAxisAlignment: CrossAxisAlignment.start, // Align to left
       children: () {
-        List<Widget> widgets = [];
-        _projectsUsers.sort((a, b) => a.id.compareTo(b.id));
-        for (ProjectUser projectUser in _projectsUsers) {
-          widgets.add(Text("${projectUser.id}: ${projectUser.finalMark}"));
+        if (_projectsUsers.isEmpty) {
+          return <Widget>[
+            const Center(child: Text('User has no projects')),
+          ];
+        } else {
+          _projectsUsers.sort((a, b) => a.id.compareTo(b.id));
+          return <Widget>[
+            for (ProjectUser projectUser in _projectsUsers)
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+                child: Text("${projectUser.id}: ${projectUser.finalMark}"),
+              ),
+          ];
         }
-        return widgets;
       }(),
     );
   }
