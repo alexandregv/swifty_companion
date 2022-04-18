@@ -104,7 +104,8 @@ class _UsersPageState extends State<UsersPage> with LoadingMixin<UsersPage> {
   }
 
   Widget buildUserFound(BuildContext context) {
-    final _primaryCursus = _user.cursusUsers.last;
+    final _primaryCursus =_user.cursusUsers.isNotEmpty ? _user.cursusUsers.last : null;
+    final _level = _primaryCursus?.level.toString() ?? 'No cursus';
     final _pool = () {
       if (_user.poolMonth == 'none' && _user.poolYear == 'none') {
         return "none";
@@ -138,7 +139,12 @@ class _UsersPageState extends State<UsersPage> with LoadingMixin<UsersPage> {
                 mainAxisAlignment: MainAxisAlignment.center, // Center vertically
                 crossAxisAlignment: CrossAxisAlignment.start, // Align to left
                 children: <Widget>[
-                  Image.network(_user.imageUrl),
+                  Image.network(
+                    _user.imageUrl,
+                    errorBuilder: (_, __, ___) {
+                      return Image.network('https://cdn.intra.42.fr/users/default.jpg'); //this is what will fill the Container in case error happened
+                    },
+                  ),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
                     child: Text("Full name: ${_user.usualFullName}"),
@@ -149,7 +155,7 @@ class _UsersPageState extends State<UsersPage> with LoadingMixin<UsersPage> {
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-                    child: Text("Level: ${_primaryCursus['level']}"),
+                    child: Text("Level: ${_level}"),
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
@@ -197,7 +203,7 @@ class User {
       location: json["location"] ?? 'Unavailable',
       imageUrl: json["image_url"],
       newImageUrl: json["new_image_url"],
-      cursusUsers: json["cursus_users"],
+      cursusUsers: json["cursus_users"] ?? [],
       poolMonth: json["pool_month"] ?? 'none',
       poolYear: json["pool_year"] ?? 'none',
     );
