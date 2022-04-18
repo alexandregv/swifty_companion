@@ -51,7 +51,11 @@ class _SearchPageState extends State<SearchPage> {
               child: TextField(
                 controller: loginFieldController,
                 textInputAction: TextInputAction.search,
-                onSubmitted: (String login) => Navigator.pushNamed(context, '/users', arguments: login.toLowerCase()),
+                onSubmitted: (String login) {
+                  if (login.isNotEmpty) {
+                    Navigator.pushNamed(context, '/users', arguments: login.toLowerCase());
+                  }
+                },
                 inputFormatters: [
                   FilteringTextInputFormatter(RegExp(r'[a-zA-Z0-9\-]'), allow: true),
                 ],
@@ -69,8 +73,10 @@ class _SearchPageState extends State<SearchPage> {
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
               child: ElevatedButton.icon(
                 onPressed: () {
-                  Navigator.pushNamed(context, '/users', arguments: loginFieldController.text.toLowerCase());
-                  loginFieldController.clear();
+                  if (loginFieldController.text.isNotEmpty) {
+                    Navigator.pushNamed(context, '/users', arguments: loginFieldController.text.toLowerCase());
+                    loginFieldController.clear();
+                  }
                 },
                 icon: const Icon(Icons.search),
                 label: const Text('Search'),
