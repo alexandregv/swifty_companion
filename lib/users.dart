@@ -127,7 +127,7 @@ class _UsersPageState extends State<UsersPage> with LoadingMixin<UsersPage> {
             tabs: [
               Tab(icon: Icon(Icons.person)),
               Tab(icon: Icon(Icons.commit)),
-              Tab(icon: Icon(Icons.area_chart)),
+              Tab(icon: Icon(Icons.stacked_bar_chart)),
             ],
           ),
         ),
