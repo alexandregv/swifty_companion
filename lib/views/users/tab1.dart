@@ -35,7 +35,7 @@ class _Tab1State extends State<Tab1> with AutomaticKeepAliveClientMixin<Tab1>{
     super.build(context);
 
     final _primaryCursus =_user.cursusUsers.isNotEmpty ? _user.cursusUsers.last : null;
-    final _level = _primaryCursus?['level'].toString() ?? 'No cursus';
+    final _level = _primaryCursus?['level'] == null ? 'No cursus' : _primaryCursus['level'].toStringAsFixed(2);
     final _pool = () {
       if (_user.poolMonth == 'none' && _user.poolYear == 'none') {
         return "none";
