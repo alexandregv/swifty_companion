@@ -40,7 +40,9 @@ class _UsersPageState extends State<UsersPage> with LoadingMixin<UsersPage> {
 
     http.Response resp = await _helper.get("https://api.intra.42.fr/v2/users/${widget.login}");
     if (resp.statusCode == 200) {
-      _user = User.fromJson(json.decode(resp.body));
+      setState(() {
+        _user = User.fromJson(json.decode(resp.body));
+      });
     } else if (resp.statusCode == 404) {
       throw Exception("User not found");
     } else {
@@ -103,20 +105,6 @@ class _UsersPageState extends State<UsersPage> with LoadingMixin<UsersPage> {
   }
 
   Widget buildUserFound(BuildContext context) {
-    final _primaryCursus =_user.cursusUsers.isNotEmpty ? _user.cursusUsers.last : null;
-    final _level = _primaryCursus?['level'].toString() ?? 'No cursus';
-    final _pool = () {
-      if (_user.poolMonth == 'none' && _user.poolYear == 'none') {
-        return "none";
-      } else if (_user.poolMonth == 'none' && _user.poolYear != 'none') {
-        return _user.poolYear;
-      } else if (_user.poolMonth != 'none' && _user.poolYear == 'none') {
-        return _user.poolMonth;
-      } else {
-        return "${_user.poolMonth} ${_user.poolYear}";
-      }
-    }();
-
     return DefaultTabController(
       length: 3,
       child: Scaffold(
@@ -134,7 +122,8 @@ class _UsersPageState extends State<UsersPage> with LoadingMixin<UsersPage> {
         resizeToAvoidBottomInset: false,
           body: TabBarView(
             children: [
-              buildTab1(context, _level, _pool),
+              Tab1(helper: _helper, login: widget.login, user: _user),
+              //buildTab1(context, _level, _pool),
               buildTab2(context),
               buildTab3(context),
             ],
@@ -143,14 +132,60 @@ class _UsersPageState extends State<UsersPage> with LoadingMixin<UsersPage> {
     );
   }
 
-  Padding userInfo(String key, String value) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-      child: Text("$key: $value"),
-    );
+  Widget buildTab2(BuildContext context) {
+    return const Icon(Icons.commit);
   }
 
-  Widget buildTab1(BuildContext context, String level, String pool) {
+  Widget buildTab3(BuildContext context) {
+    return const Icon(Icons.stacked_bar_chart);
+  }
+}
+
+class Tab1 extends StatefulWidget {
+  final OAuth2Helper helper;
+  final String login;
+  final User user;
+
+  const Tab1({
+    Key? key,
+    required this.helper,
+    required this.login,
+    required this.user,
+  }) : super(key: key);
+
+  @override
+  State<Tab1> createState() => _Tab1State();
+}
+
+class _Tab1State extends State<Tab1> with AutomaticKeepAliveClientMixin<Tab1>{
+  late final User _user;
+
+  @override
+  bool get wantKeepAlive => true;
+
+  @override
+  void initState() {
+    super.initState();
+    _user = widget.user;
+  }
+  @override
+  Widget build(BuildContext context) {
+    super.build(context);
+
+    final _primaryCursus =_user.cursusUsers.isNotEmpty ? _user.cursusUsers.last : null;
+    final _level = _primaryCursus?['level'].toString() ?? 'No cursus';
+    final _pool = () {
+      if (_user.poolMonth == 'none' && _user.poolYear == 'none') {
+        return "none";
+      } else if (_user.poolMonth == 'none' && _user.poolYear != 'none') {
+        return _user.poolYear;
+      } else if (_user.poolMonth != 'none' && _user.poolYear == 'none') {
+        return _user.poolMonth;
+      } else {
+        return "${_user.poolMonth} ${_user.poolYear}";
+      }
+    }();
+
     return Column(
       mainAxisAlignment: MainAxisAlignment.center, // Center vertically
       crossAxisAlignment: CrossAxisAlignment.start, // Align to left
@@ -163,19 +198,18 @@ class _UsersPageState extends State<UsersPage> with LoadingMixin<UsersPage> {
         ),
         userInfo('Full name', _user.usualFullName),
         userInfo('E-mail', _user.email),
-        userInfo('Level', level),
+        userInfo('Level', _level),
         userInfo('Location', _user.location),
-        userInfo('Pool', pool),
+        userInfo('Pool', _pool),
       ],
     );
   }
 
-  Widget buildTab2(BuildContext context) {
-    return const Icon(Icons.commit);
-  }
-
-  Widget buildTab3(BuildContext context) {
-    return const Icon(Icons.stacked_bar_chart);
+  Padding userInfo(String key, String value) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+      child: Text("$key: $value"),
+    );
   }
 }
 
