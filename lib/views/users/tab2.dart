@@ -88,11 +88,33 @@ class _Tab2State extends State<Tab2> with LoadingMixin<Tab2>, AutomaticKeepAlive
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
       child: () {
         if (projectUser.status == 'finished') {
-          return Text("${projectUser.project.name}: ${projectUser.finalMark}/100");
+          if (projectUser.validated) {
+            return ListTile(
+              title: Text("${projectUser.project.name}: ${projectUser.finalMark}/100"),
+              subtitle: Text(projectUser.project.slug),
+              trailing: const Icon(Icons.check, color: Colors.green),
+            );
+          } else {
+            return ListTile(
+              title: Text("${projectUser.project.name}: ${projectUser.finalMark}/100"),
+              subtitle: Text(projectUser.project.slug),
+              trailing: const Icon(Icons.close, color: Colors.red),
+            );
+          }
+        } else if (projectUser.status == 'waiting_for_correction') {
+          return ListTile(
+            title: Text("${projectUser.project.name}: ${projectUser.status}"),
+            subtitle: Text(projectUser.project.slug),
+            trailing: const Icon(Icons.query_builder, color: Colors.grey),
+          );
         } else {
-          return Text("${projectUser.project.name}: ${projectUser.status}");
-        }
-      }(),
-    );
-  }
+          return ListTile(
+            title: Text("${projectUser.project.name}: ${projectUser.status}"),
+            subtitle: Text(projectUser.project.slug),
+            trailing: const Icon(Icons.rotate_right, color: Colors.orangeAccent),
+          );
+    }
+  }(),
+  );
+}
 }
