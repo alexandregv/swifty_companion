@@ -36,7 +36,7 @@ class _LoginPageState extends State<LoginPage> {
         grantType: OAuth2Helper.AUTHORIZATION_CODE,
         clientId: '<API_APP_CLIENT_ID>',
         clientSecret: '<API_APP_CLIENT_SECRET>',
-        scopes: ['public', 'profile', 'projects']
+        scopes: ['public', 'profile', 'projects'],
     );
     _initOAuth();
   }

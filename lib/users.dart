@@ -36,7 +36,7 @@ class _UsersPageState extends State<UsersPage> with LoadingMixin<UsersPage> {
         grantType: OAuth2Helper.AUTHORIZATION_CODE,
         clientId: '<API_APP_CLIENT_ID>',
         clientSecret: '<API_APP_CLIENT_SECRET>',
-        scopes: ['public', 'profile', 'projects']
+        scopes: ['public', 'profile', 'projects'],
     );
 
     http.Response resp = await _helper.get("https://api.intra.42.fr/v2/users/${widget.login}");
@@ -105,6 +105,17 @@ class _UsersPageState extends State<UsersPage> with LoadingMixin<UsersPage> {
 
   Widget buildUserFound(BuildContext context) {
     final _primaryCursus = _user.cursusUsers.last;
+    final _pool = () {
+      if (_user.poolMonth == 'none' && _user.poolYear == 'none') {
+        return "none";
+      } else if (_user.poolMonth == 'none' && _user.poolYear != 'none') {
+        return _user.poolYear;
+      } else if (_user.poolMonth != 'none' && _user.poolYear == 'none') {
+        return _user.poolMonth;
+      } else {
+        return "${_user.poolMonth} ${_user.poolYear}";
+      }
+    }();
 
     return DefaultTabController(
       length: 3,
@@ -142,6 +153,10 @@ class _UsersPageState extends State<UsersPage> with LoadingMixin<UsersPage> {
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
               child: Text("Location: ${_user.location}"),
             ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+              child: Text("Pool: $_pool"),
+            ),
           ],
         )
       ),
@@ -160,8 +175,10 @@ class User {
   final String imageUrl;
   final String newImageUrl;
   final List<dynamic> cursusUsers;
+  final String poolMonth;
+  final String poolYear;
 
-  User({required this.login, required this.firstname, required this.lastname, required this.usualFirstName , required this.usualFullName, required this.email, required this.location, required this.imageUrl, required this.newImageUrl, required this.cursusUsers});
+  User({required this.login, required this.firstname, required this.lastname, required this.usualFirstName , required this.usualFullName, required this.email, required this.location, required this.imageUrl, required this.newImageUrl, required this.cursusUsers, required this.poolMonth, required this.poolYear});
 
   factory User.fromJson(Map<String, dynamic> json) {
     User user = User(
@@ -175,10 +192,10 @@ class User {
       imageUrl: json["image_url"],
       newImageUrl: json["new_image_url"],
       cursusUsers: json["cursus_users"],
+      poolMonth: json["pool_month"] ?? 'none',
+      poolYear: json["pool_year"] ?? 'none',
     );
-
     user.cursusUsers.sort((a, b) => a['id'].compareTo(b['id']));
-
     return user;
   }
 
