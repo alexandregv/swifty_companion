@@ -107,14 +107,25 @@ class _Tab2State extends State<Tab2> with LoadingMixin<Tab2>, AutomaticKeepAlive
             subtitle: Text(projectUser.project.slug),
             trailing: const Icon(Icons.query_builder, color: Colors.grey),
           );
-        } else {
+        } else if (projectUser.status == 'in_progress') {
           return ListTile(
             title: Text("${projectUser.project.name}: ${projectUser.status}"),
             subtitle: Text(projectUser.project.slug),
             trailing: const Icon(Icons.rotate_right, color: Colors.orangeAccent),
           );
-    }
-  }(),
-  );
-}
+        } else if (projectUser.status == 'searching_a_group') {
+          return ListTile(
+            title: Text("${projectUser.project.name}: ${projectUser.status}"),
+            subtitle: Text(projectUser.project.slug),
+            trailing: const Icon(Icons.family_restroom, color: Colors.blue),
+          );
+        } else {
+          return ListTile(
+            title: Text("${projectUser.project.name}: ${projectUser.status}"),
+            subtitle: Text(projectUser.project.slug),
+          );
+        }
+      }(),
+    );
+  }
 }
