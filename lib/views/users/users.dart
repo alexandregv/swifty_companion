@@ -7,6 +7,7 @@ import 'package:loader/loader.dart';
 import 'package:http/http.dart' as http;
 import 'package:swifty_companion/views/users/tab1.dart';
 import 'package:swifty_companion/views/users/tab2.dart';
+import 'package:swifty_companion/views/users/tab3.dart';
 
 import '../../models/project_user.dart';
 import '../../models/user.dart';
@@ -130,14 +131,10 @@ class _UsersPageState extends State<UsersPage> with LoadingMixin<UsersPage> {
             children: [
               Tab1(helper: _helper, login: widget.login, user: _user),
               Tab2(helper: _helper, login: widget.login),
-              buildTab3(context),
+              Tab3(helper: _helper, login: widget.login, user: _user),
             ],
           ),
       ),
     );
-  }
-
-  Widget buildTab3(BuildContext context) {
-    return const Icon(Icons.stacked_bar_chart);
   }
 }
