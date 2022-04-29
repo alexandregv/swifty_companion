@@ -11,8 +11,9 @@ class User {
   final List<dynamic> cursusUsers;
   final String poolMonth;
   final String poolYear;
+  final bool isStaff;
 
-  User({required this.login, required this.firstname, required this.lastname, required this.usualFirstName , required this.usualFullName, required this.email, required this.location, required this.imageUrl, required this.newImageUrl, required this.cursusUsers, required this.poolMonth, required this.poolYear});
+  User({required this.login, required this.firstname, required this.lastname, required this.usualFirstName , required this.usualFullName, required this.email, required this.location, required this.imageUrl, required this.newImageUrl, required this.cursusUsers, required this.poolMonth, required this.poolYear, required this.isStaff});
 
   factory User.fromJson(Map<String, dynamic> json) {
     User user = User(
@@ -28,6 +29,7 @@ class User {
       cursusUsers: json["cursus_users"] ?? [],
       poolMonth: json["pool_month"] ?? 'none',
       poolYear: json["pool_year"] ?? 'none',
+      isStaff: json["staff?"] ?? false,
     );
     user.cursusUsers.sort((a, b) => a['id'].compareTo(b['id']));
     return user;
