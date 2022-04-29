@@ -34,12 +34,7 @@ class _Tab1State extends State<Tab1> with AutomaticKeepAliveClientMixin<Tab1>{
   Widget build(BuildContext context) {
     super.build(context);
 
-    final _primaryCursus = _user.cursusUsers.isEmpty ? null :
-      _user.cursusUsers.firstWhere((e) => e['cursus']['name'] == '42cursus',
-        orElse: () => _user.cursusUsers.firstWhere((e) => e['cursus']['name'] == '42',
-          orElse: () => _user.cursusUsers.last))
-    ;
-    final _level = _primaryCursus?['level'] == null ? 'No cursus' : _primaryCursus['level'].toStringAsFixed(2);
+    final _level = _user.primaryCursus == null ? 'No cursus' : _user.primaryCursus?.level.toStringAsFixed(2);
     final _pool = () {
       if (_user.poolMonth == 'none' && _user.poolYear == 'none') {
         return "none";
@@ -64,7 +59,7 @@ class _Tab1State extends State<Tab1> with AutomaticKeepAliveClientMixin<Tab1>{
         ),
         userInfo('Full name', _user.usualFullName),
         userInfo('E-mail', _user.email),
-        userInfo('Level', _level),
+        userInfo('Level', _level!),
         userInfo('Location', _user.location),
         userInfo('Pool', _pool),
         if (_user.isStaff) userInfo('Staff', 'yes, panic'),

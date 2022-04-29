@@ -1,9 +1,6 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:oauth2_client/oauth2_helper.dart';
 import 'package:loader/loader.dart';
-import 'package:http/http.dart' as http;
 
 import '../../models/skill_user.dart';
 import '../../models/user.dart';
@@ -25,7 +22,7 @@ class Tab3 extends StatefulWidget {
 }
 
 class _Tab3State extends State<Tab3> with LoadingMixin<Tab3>, AutomaticKeepAliveClientMixin<Tab3>{
-  late final List<SkillUser> _skillUsers = [];
+  late List<SkillUser> _skillUsers = [];
 
   @override
   bool get wantKeepAlive => true;
@@ -37,28 +34,10 @@ class _Tab3State extends State<Tab3> with LoadingMixin<Tab3>, AutomaticKeepAlive
 
   @override
   Future<void> load() async {
-    final _primaryCursus = widget.user.cursusUsers.isEmpty ? null :
-    widget.user.cursusUsers.firstWhere((e) => e['cursus']['name'] == '42cursus',
-        orElse: () => widget.user.cursusUsers.firstWhere((e) => e['cursus']['name'] == '42',
-            orElse: () => widget.user.cursusUsers.last))
-    ;
-
-    http.Response resp = await widget.helper.get("https://api.intra.42.fr/v2/users/${widget.login}"); //TODO: Get all pages
-    if (resp.statusCode == 200) {
+    if (widget.user.primaryCursus != null) {
       setState(() {
-        Map<String, dynamic> userBody = json.decode(resp.body);
-        for (Map<String, dynamic> cursusUser in userBody["cursus_users"]) {
-          if (cursusUser["id"] == _primaryCursus['id']) {
-            for (Map<String, dynamic> skill in cursusUser["skills"]) {
-              _skillUsers.add(SkillUser.fromJson(skill));
-            }
-          }
-        }
+        _skillUsers = widget.user.primaryCursus!.skillUsers;
       });
-    } else if (resp.statusCode == 404) {
-      throw Exception("Skills not found");
-    } else {
-      throw Exception("Error retrieving user's skills");
     }
   }
 
@@ -101,7 +80,7 @@ class _Tab3State extends State<Tab3> with LoadingMixin<Tab3>, AutomaticKeepAlive
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 0),
       child: ListTile(
-        title: Text("${skillUser.skillName}: ${skillUser.level}"),
+        title: Text("${skillUser.skillName}: ${skillUser.level.toStringAsFixed(2)}"),
       ),
     );
   }
