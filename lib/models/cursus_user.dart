@@ -6,6 +6,7 @@ class CursusUser {
   final Cursus cursus;
   final double level;
   final List<SkillUser> skillUsers;
+  late DateTime? blackholedAt;
 
   CursusUser({required this.id, required this.cursus, required this.level, required this.skillUsers});
 
@@ -19,6 +20,13 @@ class CursusUser {
           SkillUser.fromJson(skillUser)
       ],
     );
+
+    if (json["end_at"] == null) {
+      projectUser.blackholedAt = null;
+    } else {
+      projectUser.blackholedAt = DateTime.parse(json["end_at"]);
+    }
+
     return projectUser;
   }
 

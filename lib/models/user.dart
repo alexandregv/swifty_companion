@@ -15,6 +15,7 @@ class User {
   final String poolYear;
   final bool isStaff;
   late CursusUser? primaryCursus;
+  late DateTime? blackholedAt;
 
   User({required this.login, required this.firstname, required this.lastname, required this.usualFirstName , required this.usualFullName, required this.email, required this.location, required this.imageUrl, required this.newImageUrl, required this.cursusUsers, required this.poolMonth, required this.poolYear, required this.isStaff});
 
@@ -45,6 +46,12 @@ class User {
           orElse: () => user.cursusUsers.firstWhere((e) => e.cursus.name == '42',
               orElse: () => user.cursusUsers.last))
     ;
+
+    if (user.primaryCursus == null) {
+      user.blackholedAt = null;
+    } else {
+      user.blackholedAt = user.primaryCursus!.blackholedAt;
+    }
 
     return user;
   }

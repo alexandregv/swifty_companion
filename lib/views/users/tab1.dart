@@ -62,6 +62,7 @@ class _Tab1State extends State<Tab1> with AutomaticKeepAliveClientMixin<Tab1>{
         userInfo('Level', _level!),
         userInfo('Location', _user.location),
         userInfo('Pool', _pool),
+        if (_user.blackholedAt != null) userInfo('Blackoled at', _user.blackholedAt!.toLocal().toString()),
         if (_user.isStaff) userInfo('Staff', 'yes, panic'),
       ],
     );
