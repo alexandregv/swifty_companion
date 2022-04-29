@@ -87,44 +87,44 @@ class _Tab2State extends State<Tab2> with LoadingMixin<Tab2>, AutomaticKeepAlive
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
       child: () {
+        late String title;
+        late IconData icon;
+        late Color color;
+
         if (projectUser.status == 'finished') {
           if (projectUser.validated) {
-            return ListTile(
-              title: Text("${projectUser.project.name}: ${projectUser.finalMark}/100"),
-              subtitle: Text(projectUser.project.slug),
-              trailing: const Icon(Icons.check, color: Colors.green),
-            );
+            title = "${projectUser.project.name}: ${projectUser.finalMark}/100";
+            color = Colors.green;
+            icon = Icons.check;
           } else {
-            return ListTile(
-              title: Text("${projectUser.project.name}: ${projectUser.finalMark}/100"),
-              subtitle: Text(projectUser.project.slug),
-              trailing: const Icon(Icons.close, color: Colors.red),
-            );
+            title = "${projectUser.project.name}: ${projectUser.finalMark}/100";
+            color = Colors.red;
+            icon = Icons.close;
           }
         } else if (projectUser.status == 'waiting_for_correction') {
-          return ListTile(
-            title: Text("${projectUser.project.name}: ${projectUser.status}"),
-            subtitle: Text(projectUser.project.slug),
-            trailing: const Icon(Icons.hourglass_bottom, color: Colors.grey),
-          );
+          title = "${projectUser.project.name}: ${projectUser.status}";
+          color = Colors.grey;
+          icon = Icons.hourglass_bottom;
         } else if (projectUser.status == 'in_progress') {
-          return ListTile(
-            title: Text("${projectUser.project.name}: ${projectUser.status}"),
-            subtitle: Text(projectUser.project.slug),
-            trailing: const Icon(Icons.history_toggle_off, color: Colors.orangeAccent),
-          );
+          title = "${projectUser.project.name}: ${projectUser.status}";
+          color = Colors.orangeAccent;
+          icon = Icons.history_toggle_off;
         } else if (projectUser.status == 'searching_a_group') {
-          return ListTile(
-            title: Text("${projectUser.project.name}: ${projectUser.status}"),
-            subtitle: Text(projectUser.project.slug),
-            trailing: const Icon(Icons.family_restroom, color: Colors.blue),
-          );
+          title = "${projectUser.project.name}: ${projectUser.status}";
+          color = Colors.blue;
+          icon = Icons.family_restroom;
         } else {
           return ListTile(
             title: Text("${projectUser.project.name}: ${projectUser.status}"),
             subtitle: Text(projectUser.project.slug),
           );
         }
+
+        return ListTile(
+          title: Text(title),
+          subtitle: Text(projectUser.project.slug),
+          trailing: Icon(icon, color: color),
+        );
       }(),
     );
   }
