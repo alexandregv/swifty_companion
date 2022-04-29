@@ -105,13 +105,13 @@ class _Tab2State extends State<Tab2> with LoadingMixin<Tab2>, AutomaticKeepAlive
           return ListTile(
             title: Text("${projectUser.project.name}: ${projectUser.status}"),
             subtitle: Text(projectUser.project.slug),
-            trailing: const Icon(Icons.query_builder, color: Colors.grey),
+            trailing: const Icon(Icons.hourglass_bottom, color: Colors.grey),
           );
         } else if (projectUser.status == 'in_progress') {
           return ListTile(
             title: Text("${projectUser.project.name}: ${projectUser.status}"),
             subtitle: Text(projectUser.project.slug),
-            trailing: const Icon(Icons.rotate_right, color: Colors.orangeAccent),
+            trailing: const Icon(Icons.history_toggle_off, color: Colors.orangeAccent),
           );
         } else if (projectUser.status == 'searching_a_group') {
           return ListTile(
