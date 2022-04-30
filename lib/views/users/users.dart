@@ -9,7 +9,7 @@ import 'package:swifty_companion/views/users/tab1.dart';
 import 'package:swifty_companion/views/users/tab2.dart';
 import 'package:swifty_companion/views/users/tab3.dart';
 
-import '../../intraHttpService.dart';
+import '../../intra_http_service.dart';
 import '../../models/user.dart';
 
 class UsersPage extends StatefulWidget {

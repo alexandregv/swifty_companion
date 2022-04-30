@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:oauth2_client/oauth2_helper.dart';
-import 'package:swifty_companion/intraHttpService.dart';
+import 'package:swifty_companion/intra_http_service.dart';
 
 import '../../models/user.dart';
 

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:oauth2_client/oauth2_helper.dart';
 import 'package:loader/loader.dart';
 
-import '../../intraHttpService.dart';
+import '../../intra_http_service.dart';
 import '../../models/skill_user.dart';
 import '../../models/user.dart';
 

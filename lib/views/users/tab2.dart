@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:loader/loader.dart';
 import 'package:http/http.dart' as http;
 
-import '../../intraHttpService.dart';
+import '../../intra_http_service.dart';
 import '../../models/project_user.dart';
 
 class Tab2 extends StatefulWidget {
