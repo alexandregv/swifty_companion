@@ -27,41 +27,32 @@ class _UsersPageState extends State<UsersPage> with LoadingMixin<UsersPage> {
   late User _user;
   ImageProvider _userImage = const NetworkImage("https://cdn.intra.42.fr/users/medium_default.jpg");
 
-  Future <void> fetchUser(String login) async {
-    http.Response resp = await _intraHttpService.get("/users/$login");
-    if (resp.statusCode == 200) {
-      setState(() {
-        _user = User.fromJson(json.decode(resp.body));
-      });
-    } else if (resp.statusCode == 404) {
-      throw Exception("User not found");
-    } else {
-      throw Exception("Error retrieving user");
-    }
+  Future <void> refreshUser() async {
+    setState(() => loading = true);
+    final User user = await _intraHttpService.getUser(widget.login);
+    setState(() {
+      _user = user;
+      loading = false;
+    });
   }
 
-  Future <void> fetchUserImage(User user) async {
-    final List<String> split = user.imageUrl.split("/");
-    final String last = split.removeLast();
-    final String mediumUrl = split.join("/") + "/medium_" + last;
-
-    http.Response r = await http.get(Uri.parse(mediumUrl));
-    if (r.statusCode == 200) {
-      _userImage = MemoryImage(r.bodyBytes);
-    } else {
-      r = await http.get(Uri.parse(mediumUrl));
-      if (r.statusCode == 200) {
-        _userImage = MemoryImage(r.bodyBytes);
-      } else {
-        _userImage = const NetworkImage("https://cdn.intra.42.fr/users/medium_default.jpg");
-      }
-    }
+  Future <void> refreshUserImage(User user) async {
+    setState(() => loading = true);
+    final ImageProvider img = await _intraHttpService.getUserImage(_user);
+    setState(() {
+      _userImage = img;
+      loading = false;
+    });
   }
 
   @override
   Future<void> load() async {
-    await fetchUser(widget.login);
-    await fetchUserImage(_user);
+    final User user = await _intraHttpService.getUser(widget.login);
+    final ImageProvider img = await _intraHttpService.getUserImage(user);
+    setState(() {
+      _user = user;
+      _userImage = img;
+    });
   }
 
   @override
@@ -96,7 +87,7 @@ class _UsersPageState extends State<UsersPage> with LoadingMixin<UsersPage> {
             actions: [
               IconButton(
                 icon: const Icon(Icons.refresh),
-                onPressed: () async => await fetchUser(widget.login),
+                onPressed: () => refreshUser(),
               ),
             ],
           ),
@@ -134,7 +125,7 @@ class _UsersPageState extends State<UsersPage> with LoadingMixin<UsersPage> {
           actions: [
             IconButton(
               icon: const Icon(Icons.refresh),
-              onPressed: () async => await fetchUser(widget.login),
+              onPressed: () => refreshUser(),
             ),
           ],
           bottom: const TabBar(

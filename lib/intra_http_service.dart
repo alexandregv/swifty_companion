@@ -1,8 +1,11 @@
 import 'dart:convert' as convert;
 
+import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import 'package:oauth2_client/oauth2_client.dart';
 import 'package:oauth2_client/oauth2_helper.dart';
+
+import 'models/user.dart';
 
 class IntraHttpService {
   final String _baseUrl = "https://api.intra.42.fr/v2/";
@@ -73,6 +76,35 @@ class IntraHttpService {
       return craftedResponse;
     } else {
       return response;
+    }
+  }
+
+  Future<User> getUser(String login) async {
+    http.Response resp = await get("/users/$login");
+    if (resp.statusCode == 200) {
+        return User.fromJson(convert.jsonDecode(resp.body));
+    } else if (resp.statusCode == 404) {
+      throw Exception("User not found");
+    } else {
+      throw Exception("Error retrieving user");
+    }
+  }
+
+  Future<ImageProvider> getUserImage(User user) async {
+    final List<String> split = user.imageUrl.split("/");
+    final String last = split.removeLast();
+    final String mediumUrl = split.join("/") + "/medium_" + last;
+
+    http.Response r = await http.get(Uri.parse(mediumUrl));
+    if (r.statusCode == 200) {
+      return MemoryImage(r.bodyBytes);
+    } else {
+      r = await http.get(Uri.parse(mediumUrl));
+      if (r.statusCode == 200) {
+        return MemoryImage(r.bodyBytes);
+      } else {
+        return const NetworkImage("https://cdn.intra.42.fr/users/medium_default.jpg");
+      }
     }
   }
 }
