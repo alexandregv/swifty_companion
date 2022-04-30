@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:oauth2_client/oauth2_helper.dart';
+import 'package:swifty_companion/intraHttpService.dart';
 
 import '../../models/user.dart';
 
 class Tab1 extends StatefulWidget {
-  final OAuth2Helper helper;
+  final IntraHttpService intraHttpService;
   final String login;
   final User user;
 
   const Tab1({
     Key? key,
-    required this.helper,
+    required this.intraHttpService,
     required this.login,
     required this.user,
   }) : super(key: key);

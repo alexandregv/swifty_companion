@@ -5,15 +5,16 @@ import 'package:oauth2_client/oauth2_helper.dart';
 import 'package:loader/loader.dart';
 import 'package:http/http.dart' as http;
 
+import '../../intraHttpService.dart';
 import '../../models/project_user.dart';
 
 class Tab2 extends StatefulWidget {
-  final OAuth2Helper helper;
+  final IntraHttpService intraHttpService;
   final String login;
 
   const Tab2({
     Key? key,
-    required this.helper,
+    required this.intraHttpService,
     required this.login,
   }) : super(key: key);
 
@@ -29,7 +30,7 @@ class _Tab2State extends State<Tab2> with LoadingMixin<Tab2>, AutomaticKeepAlive
 
   @override
   Future<void> load() async {
-    http.Response resp = await widget.helper.get("https://api.intra.42.fr/v2/users/${widget.login}/projects_users?page[size]=100"); //TODO: Get all pages
+    http.Response resp = await widget.intraHttpService.get("/users/${widget.login}/projects_users?page[size]=100"); //TODO: Get all pages
     if (resp.statusCode == 200) {
       setState(() {
         for (Map<String, dynamic> projectUser in json.decode(resp.body)) {

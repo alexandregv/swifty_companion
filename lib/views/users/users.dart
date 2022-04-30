@@ -9,6 +9,7 @@ import 'package:swifty_companion/views/users/tab1.dart';
 import 'package:swifty_companion/views/users/tab2.dart';
 import 'package:swifty_companion/views/users/tab3.dart';
 
+import '../../intraHttpService.dart';
 import '../../models/user.dart';
 
 class UsersPage extends StatefulWidget {
@@ -24,19 +25,12 @@ class UsersPage extends StatefulWidget {
 }
 
 class _UsersPageState extends State<UsersPage> with LoadingMixin<UsersPage> {
-  late final OAuth2Helper _helper;
+  final IntraHttpService _intraHttpService = IntraHttpService();
   late User _user;
-
-  final OAuth2Client client = OAuth2Client(
-    authorizeUrl: 'https://api.intra.42.fr/oauth/authorize',
-    tokenUrl: 'https://api.intra.42.fr/oauth/token',
-    redirectUri: 'my.flutterycompanion://oauth2redirect',
-    customUriScheme: 'my.flutterycompanion',
-  );
 
   Future <void> fetchUser(String login) async {
     setState(() => loading = true);
-    http.Response resp = await _helper.get("https://api.intra.42.fr/v2/users/${widget.login}");
+    http.Response resp = await _intraHttpService.get("/users/${widget.login}");
     if (resp.statusCode == 200) {
       setState(() {
         _user = User.fromJson(json.decode(resp.body));
@@ -53,12 +47,6 @@ class _UsersPageState extends State<UsersPage> with LoadingMixin<UsersPage> {
 
   @override
   Future<void> load() async {
-    _helper = OAuth2Helper(client,
-        grantType: OAuth2Helper.AUTHORIZATION_CODE,
-        clientId: '<API_APP_CLIENT_ID>',
-        clientSecret: '<API_APP_CLIENT_SECRET>',
-        scopes: ['public', 'profile', 'projects'],
-    );
     await fetchUser(widget.login);
   }
 
@@ -87,6 +75,7 @@ class _UsersPageState extends State<UsersPage> with LoadingMixin<UsersPage> {
   }
 
   Widget buildUserNotFound(BuildContext context) {
+    print(error);
     return Scaffold(
           appBar: AppBar(
             title: Text(widget.login),
@@ -147,9 +136,9 @@ class _UsersPageState extends State<UsersPage> with LoadingMixin<UsersPage> {
         body: TabBarView(
           physics: const NeverScrollableScrollPhysics(),
           children: [
-            Tab1(helper: _helper, login: widget.login, user: _user),
-            Tab2(helper: _helper, login: widget.login),
-            Tab3(helper: _helper, login: widget.login, user: _user),
+            Tab1(intraHttpService: _intraHttpService, login: widget.login, user: _user),
+            Tab2(intraHttpService: _intraHttpService, login: widget.login),
+            Tab3(intraHttpService: _intraHttpService, login: widget.login, user: _user),
           ],
         ),
       ),
