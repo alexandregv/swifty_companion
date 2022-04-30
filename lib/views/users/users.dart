@@ -8,6 +8,7 @@ import 'package:http/http.dart' as http;
 import 'package:swifty_companion/views/users/tab1.dart';
 import 'package:swifty_companion/views/users/tab2.dart';
 import 'package:swifty_companion/views/users/tab3.dart';
+import 'package:swifty_companion/views/users/tab4.dart';
 
 import '../../models/project_user.dart';
 import '../../models/user.dart';
@@ -113,7 +114,7 @@ class _UsersPageState extends State<UsersPage> with LoadingMixin<UsersPage> {
 
   Widget buildUserFound(BuildContext context) {
     return DefaultTabController(
-      length: 3,
+      length: 4,
       child: Scaffold(
         appBar: AppBar(
           title: Text(widget.login),
@@ -123,6 +124,7 @@ class _UsersPageState extends State<UsersPage> with LoadingMixin<UsersPage> {
               Tab(icon: Icon(Icons.person)),
               Tab(icon: Icon(Icons.commit)),
               Tab(icon: Icon(Icons.stacked_bar_chart)),
+              Tab(icon: Icon(Icons.important_devices_sharp)),
             ],
           ),
         ),
@@ -133,6 +135,7 @@ class _UsersPageState extends State<UsersPage> with LoadingMixin<UsersPage> {
               Tab1(helper: _helper, login: widget.login, user: _user),
               Tab2(helper: _helper, login: widget.login),
               Tab3(helper: _helper, login: widget.login, user: _user),
+              Tab4(helper: _helper, login: widget.login),
             ],
           ),
       ),
