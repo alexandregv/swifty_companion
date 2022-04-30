@@ -1,5 +1,5 @@
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
-import 'package:oauth2_client/oauth2_helper.dart';
 import 'package:swifty_companion/intra_http_service.dart';
 
 import '../../models/user.dart';
@@ -45,12 +45,22 @@ class _Tab1State extends State<Tab1> with AutomaticKeepAliveClientMixin<Tab1>{
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        Image.network(
-          widget.user.imageUrl,
-          errorBuilder: (_, __, ___) {
-            return Image.network('https://cdn.intra.42.fr/users/default.jpg');
-          },
+        Container(
+          width: MediaQuery.of(context).size.width,
+          height: MediaQuery.of(context).size.width,
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              fit: BoxFit.fill,
+              image: NetworkImage(widget.user.imageUrl),
+            ),
+          ),
         ),
+        //Image.network(
+        //  widget.user.imageUrl,
+        //  errorBuilder: (_, __, ___) {
+        //    return Image.network('https://cdn.intra.42.fr/users/default.jpg');
+        //  },
+        //),
         userInfo('Full name', widget.user.usualFullName),
         userInfo('E-mail', widget.user.email),
         userInfo('Level', _level!),
