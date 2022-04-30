@@ -44,25 +44,26 @@ class IntraHttpService {
     if (response.statusCode == 200) { //TODO: add 2nd condition to avoid crafting a paginated request if x-total is 1
       String craftedBody = response.body;
 
-      if (response.headers["x-total"] != null && response.headers["x-per-page"] != null) {
+      if (response.headers["x-total"] != null && response.headers["x-per-page"] != null && response.headers["x-page"] != null) {
         final int xTotal = int.parse(response.headers["x-total"] ?? '0');
         final int xPerPage = int.parse(response.headers["x-per-page"] ?? '100');
+        final int xPage = int.parse(response.headers["x-page"] ?? '1');
         final int totalPages = xTotal ~/ xPerPage + 1;
 
-        if (totalPages > 1) {
-          for (int i = 2; i <= totalPages; i++) {
-            final Uri newUri = receivedUri.replace(
-              queryParameters: {
-                'page[size]': '100',
-                ...receivedUri.queryParameters,
-                'page[number]': i.toString(),
-              },
-            );
-            http.Response response = await _helper.get(newUri.toString());
-            List<dynamic> arr = convert.jsonDecode(craftedBody);
-            arr.addAll(convert.jsonDecode(response.body));
-            craftedBody = convert.jsonEncode(arr);
-          }
+        if (totalPages > 1 && xPage <= totalPages) {
+          List<dynamic> arr = convert.jsonDecode(craftedBody);
+          final nextPage = xPage + 1;
+          final Uri nextUri = newUri.replace(
+            scheme: '',
+            host: '',
+            queryParameters: {
+              ...receivedUri.queryParameters,
+              'page[number]': nextPage.toString(),
+            },
+          );
+          http.Response nextResponse = await getPages(nextUri.toString().substring(6));
+          arr.addAll(convert.jsonDecode(nextResponse.body));
+          craftedBody = convert.jsonEncode(arr);
         }
       }
 
