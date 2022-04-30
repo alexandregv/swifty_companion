@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:oauth2_client/oauth2_helper.dart';
 import 'package:loader/loader.dart';
 import 'package:http/http.dart' as http;
 
@@ -30,7 +29,7 @@ class _Tab2State extends State<Tab2> with LoadingMixin<Tab2>, AutomaticKeepAlive
 
   @override
   Future<void> load() async {
-    http.Response resp = await widget.intraHttpService.get("/users/${widget.login}/projects_users?page[size]=100"); //TODO: Get all pages
+    http.Response resp = await widget.intraHttpService.getPages("/users/${widget.login}/projects_users?page[size]=50"); //TODO: Get all pages
     if (resp.statusCode == 200) {
       setState(() {
         for (Map<String, dynamic> projectUser in json.decode(resp.body)) {
