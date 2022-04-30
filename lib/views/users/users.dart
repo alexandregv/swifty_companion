@@ -34,7 +34,7 @@ class _UsersPageState extends State<UsersPage> with LoadingMixin<UsersPage> {
     customUriScheme: 'my.flutterycompanion',
   );
 
-  fetchUser(String login) async {
+  Future <void> fetchUser(String login) async {
     http.Response resp = await _helper.get("https://api.intra.42.fr/v2/users/${widget.login}");
     if (resp.statusCode == 200) {
       setState(() {
