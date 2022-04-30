@@ -72,7 +72,6 @@ class IntraHttpService {
       );
       return craftedResponse;
     } else {
-      print('not crafted');
       return response;
     }
   }
