@@ -128,7 +128,11 @@ class _UsersPageState extends State<UsersPage> with LoadingMixin<UsersPage> {
           actions: [
             IconButton(
               icon: const Icon(Icons.refresh),
-              onPressed: () => fetchUser(widget.login),
+              onPressed: () async {
+                setState(() => loading = true);
+                await fetchUser(widget.login);
+                setState(() => loading = false);
+              },
             ),
           ],
           bottom: const TabBar(
