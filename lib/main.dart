@@ -21,6 +21,15 @@ class App extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.deepPurple,
       ),
+      darkTheme: ThemeData(
+        brightness: Brightness.dark,
+        primarySwatch: Colors.deepPurple,
+        primaryColor: Colors.deepPurple,
+        appBarTheme: const AppBarTheme(
+          backgroundColor: Colors.deepPurple
+        ),
+      ),
+      debugShowCheckedModeBanner: false,
       //routes: {
       //  '/': (context) => const LoginPage(),
       //  '/search': (context) => const SearchPage(),
