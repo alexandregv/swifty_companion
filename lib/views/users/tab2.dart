@@ -29,7 +29,7 @@ class _Tab2State extends State<Tab2> with LoadingMixin<Tab2>, AutomaticKeepAlive
 
   @override
   Future<void> load() async {
-    http.Response resp = await widget.intraHttpService.getPages("/users/${widget.login}/projects_users");
+    http.Response resp = await widget.intraHttpService.getPages("/users/${widget.login}/projects_users?sort=validated_at");
     if (resp.statusCode == 200) {
       setState(() {
         for (Map<String, dynamic> projectUser in json.decode(resp.body)) {
