@@ -25,35 +25,43 @@ class UsersPage extends StatefulWidget {
 class _UsersPageState extends State<UsersPage> with LoadingMixin<UsersPage> {
   final IntraHttpService _intraHttpService = IntraHttpService();
   late User _user;
-  ImageProvider _userImage = const NetworkImage("https://cdn.intra.42.fr/users/default.jpg");
+  ImageProvider _userImage = const NetworkImage("https://cdn.intra.42.fr/users/medium_default.jpg");
 
   Future <void> fetchUser(String login) async {
-    setState(() => loading = true);
-    http.Response resp = await _intraHttpService.get("/users/${widget.login}");
+    http.Response resp = await _intraHttpService.get("/users/$login");
     if (resp.statusCode == 200) {
       setState(() {
         _user = User.fromJson(json.decode(resp.body));
       });
-      setState(() => loading = false);
     } else if (resp.statusCode == 404) {
-      setState(() => loading = false);
       throw Exception("User not found");
     } else {
-      setState(() => loading = false);
       throw Exception("Error retrieving user");
+    }
+  }
+
+  Future <void> fetchUserImage(User user) async {
+    final List<String> split = user.imageUrl.split("/");
+    final String last = split.removeLast();
+    final String mediumUrl = split.join("/") + "/medium_" + last;
+
+    http.Response r = await http.get(Uri.parse(mediumUrl));
+    if (r.statusCode == 200) {
+      _userImage = MemoryImage(r.bodyBytes);
+    } else {
+      r = await http.get(Uri.parse(mediumUrl));
+      if (r.statusCode == 200) {
+        _userImage = MemoryImage(r.bodyBytes);
+      } else {
+        _userImage = const NetworkImage("https://cdn.intra.42.fr/users/medium_default.jpg");
+      }
     }
   }
 
   @override
   Future<void> load() async {
     await fetchUser(widget.login);
-
-    http.Response r = await http.get(Uri.parse(_user.imageUrl));
-    if (r.statusCode == 200) {
-      _userImage = MemoryImage(r.bodyBytes);
-    } else {
-      _userImage = const NetworkImage("https://cdn.intra.42.fr/users/default.jpg");
-    }
+    await fetchUserImage(_user);
   }
 
   @override
