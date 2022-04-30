@@ -30,11 +30,6 @@ class App extends StatelessWidget {
         ),
       ),
       debugShowCheckedModeBanner: false,
-      //routes: {
-      //  '/': (context) => const LoginPage(),
-      //  '/search': (context) => const SearchPage(),
-      //  '/about': (context) => const AboutPage(),
-      //},
       onGenerateRoute: (RouteSettings settings) {
         switch (settings.name) {
           case '/':return CupertinoPageRoute(builder: (_) => const LoginPage(), settings: settings);
