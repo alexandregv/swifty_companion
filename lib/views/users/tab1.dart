@@ -20,30 +20,23 @@ class Tab1 extends StatefulWidget {
 }
 
 class _Tab1State extends State<Tab1> with AutomaticKeepAliveClientMixin<Tab1>{
-  late final User _user;
-
   @override
   bool get wantKeepAlive => true;
 
   @override
-  void initState() {
-    super.initState();
-    _user = widget.user;
-  }
-  @override
   Widget build(BuildContext context) {
     super.build(context);
 
-    final _level = _user.primaryCursus == null ? 'No cursus' : _user.primaryCursus?.level.toStringAsFixed(2);
+    final _level = widget.user.primaryCursus == null ? 'No cursus' : widget.user.primaryCursus?.level.toStringAsFixed(2);
     final _pool = () {
-      if (_user.poolMonth == 'none' && _user.poolYear == 'none') {
+      if (widget.user.poolMonth == 'none' && widget.user.poolYear == 'none') {
         return "none";
-      } else if (_user.poolMonth == 'none' && _user.poolYear != 'none') {
-        return _user.poolYear;
-      } else if (_user.poolMonth != 'none' && _user.poolYear == 'none') {
-        return _user.poolMonth;
+      } else if (widget.user.poolMonth == 'none' && widget.user.poolYear != 'none') {
+        return widget.user.poolYear;
+      } else if (widget.user.poolMonth != 'none' && widget.user.poolYear == 'none') {
+        return widget.user.poolMonth;
       } else {
-        return "${_user.poolMonth} ${_user.poolYear}";
+        return "${widget.user.poolMonth} ${widget.user.poolYear}";
       }
     }();
 
@@ -52,18 +45,18 @@ class _Tab1State extends State<Tab1> with AutomaticKeepAliveClientMixin<Tab1>{
       crossAxisAlignment: CrossAxisAlignment.start, // Align to left
       children: <Widget>[
         Image.network(
-          _user.imageUrl,
+          widget.user.imageUrl,
           errorBuilder: (_, __, ___) {
             return Image.network('https://cdn.intra.42.fr/users/default.jpg');
           },
         ),
-        userInfo('Full name', _user.usualFullName),
-        userInfo('E-mail', _user.email),
+        userInfo('Full name', widget.user.usualFullName),
+        userInfo('E-mail', widget.user.email),
         userInfo('Level', _level!),
-        userInfo('Location', _user.location),
+        userInfo('Location', widget.user.location),
         userInfo('Pool', _pool),
-        if (_user.blackholedAt != null) userInfo('Blackoled at', _user.blackholedAt!.toLocal().toString()),
-        if (_user.isStaff) userInfo('Staff', 'yes, panic'),
+        if (widget.user.blackholedAt != null) userInfo('Blackoled at', widget.user.blackholedAt!.toLocal().toString()),
+        if (widget.user.isStaff) userInfo('Staff', 'yes, panic'),
       ],
     );
   }
