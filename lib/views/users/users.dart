@@ -1,8 +1,6 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:oauth2_client/oauth2_client.dart';
-import 'package:oauth2_client/oauth2_helper.dart';
 import 'package:loader/loader.dart';
 import 'package:http/http.dart' as http;
 import 'package:swifty_companion/views/users/tab1.dart';
@@ -27,6 +25,7 @@ class UsersPage extends StatefulWidget {
 class _UsersPageState extends State<UsersPage> with LoadingMixin<UsersPage> {
   final IntraHttpService _intraHttpService = IntraHttpService();
   late User _user;
+  ImageProvider _userImage = const NetworkImage("https://cdn.intra.42.fr/users/default.jpg");
 
   Future <void> fetchUser(String login) async {
     setState(() => loading = true);
@@ -48,6 +47,13 @@ class _UsersPageState extends State<UsersPage> with LoadingMixin<UsersPage> {
   @override
   Future<void> load() async {
     await fetchUser(widget.login);
+
+    http.Response r = await http.get(Uri.parse(_user.imageUrl));
+    if (r.statusCode == 200) {
+      _userImage = MemoryImage(r.bodyBytes);
+    } else {
+      _userImage = const NetworkImage("https://cdn.intra.42.fr/users/default.jpg");
+    }
   }
 
   @override
@@ -135,7 +141,7 @@ class _UsersPageState extends State<UsersPage> with LoadingMixin<UsersPage> {
         body: TabBarView(
           physics: const NeverScrollableScrollPhysics(),
           children: [
-            Tab1(intraHttpService: _intraHttpService, login: widget.login, user: _user),
+            Tab1(intraHttpService: _intraHttpService, login: widget.login, user: _user, userImage: _userImage),
             Tab2(intraHttpService: _intraHttpService, login: widget.login),
             Tab3(intraHttpService: _intraHttpService, login: widget.login, user: _user),
           ],

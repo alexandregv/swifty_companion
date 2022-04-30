@@ -8,12 +8,14 @@ class Tab1 extends StatefulWidget {
   final IntraHttpService intraHttpService;
   final String login;
   final User user;
+  final ImageProvider userImage;
 
   const Tab1({
     Key? key,
     required this.intraHttpService,
     required this.login,
     required this.user,
+    required this.userImage,
   }) : super(key: key);
 
   @override
@@ -51,16 +53,10 @@ class _Tab1State extends State<Tab1> with AutomaticKeepAliveClientMixin<Tab1>{
           decoration: BoxDecoration(
             image: DecorationImage(
               fit: BoxFit.fill,
-              image: NetworkImage(widget.user.imageUrl),
+              image: widget.userImage,
             ),
           ),
         ),
-        //Image.network(
-        //  widget.user.imageUrl,
-        //  errorBuilder: (_, __, ___) {
-        //    return Image.network('https://cdn.intra.42.fr/users/default.jpg');
-        //  },
-        //),
         userInfo('Full name', widget.user.usualFullName),
         userInfo('E-mail', widget.user.email),
         userInfo('Level', _level!),
