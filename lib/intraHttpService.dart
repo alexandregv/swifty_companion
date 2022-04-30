@@ -41,16 +41,16 @@ class IntraHttpService {
     );
 
     http.Response response = await _helper.get(newUri.toString());
-    if (response.statusCode == 200) { //TODO: add 2nd condition to avoid crafting a paginated request if x-total is 1
+    final int xTotal = int.parse(response.headers["x-total"] ?? '0');
+    final int xPerPage = int.parse(response.headers["x-per-page"] ?? '100');
+    final int xPage = int.parse(response.headers["x-page"] ?? '1');
+    final int totalPages = xTotal ~/ xPerPage + 1;
+
+    if (response.statusCode == 200 && totalPages > 1) {
       String craftedBody = response.body;
 
       if (response.headers["x-total"] != null && response.headers["x-per-page"] != null && response.headers["x-page"] != null) {
-        final int xTotal = int.parse(response.headers["x-total"] ?? '0');
-        final int xPerPage = int.parse(response.headers["x-per-page"] ?? '100');
-        final int xPage = int.parse(response.headers["x-page"] ?? '1');
-        final int totalPages = xTotal ~/ xPerPage + 1;
-
-        if (totalPages > 1 && xPage <= totalPages) {
+        if (xPage <= totalPages) {
           List<dynamic> arr = convert.jsonDecode(craftedBody);
           final nextPage = xPage + 1;
           final Uri nextUri = newUri.replace(
@@ -72,6 +72,7 @@ class IntraHttpService {
       );
       return craftedResponse;
     } else {
+      print('not crafted');
       return response;
     }
   }
