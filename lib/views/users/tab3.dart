@@ -28,11 +28,6 @@ class _Tab3State extends State<Tab3> with LoadingMixin<Tab3>, AutomaticKeepAlive
   bool get wantKeepAlive => true;
 
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   Future<void> load() async {
     if (widget.user.primaryCursus != null) {
       setState(() {

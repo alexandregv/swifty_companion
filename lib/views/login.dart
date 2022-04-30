@@ -31,6 +31,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   void initState() {
     super.initState();
+
     client.accessTokenRequestHeaders = {'Accept': 'application/json'};
     helper = OAuth2Helper(client,
         grantType: OAuth2Helper.AUTHORIZATION_CODE,

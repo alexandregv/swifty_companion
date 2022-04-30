@@ -28,11 +28,6 @@ class _Tab2State extends State<Tab2> with LoadingMixin<Tab2>, AutomaticKeepAlive
   bool get wantKeepAlive => true;
 
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   Future<void> load() async {
     http.Response resp = await widget.helper.get("https://api.intra.42.fr/v2/users/${widget.login}/projects_users?page[size]=100"); //TODO: Get all pages
     if (resp.statusCode == 200) {

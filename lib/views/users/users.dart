@@ -9,7 +9,6 @@ import 'package:swifty_companion/views/users/tab1.dart';
 import 'package:swifty_companion/views/users/tab2.dart';
 import 'package:swifty_companion/views/users/tab3.dart';
 
-import '../../models/project_user.dart';
 import '../../models/user.dart';
 
 class UsersPage extends StatefulWidget {
@@ -61,7 +60,6 @@ class _UsersPageState extends State<UsersPage> with LoadingMixin<UsersPage> {
     if (loading) {
       return buildLoader(context);
     } else if (hasError) {
-      print(error);
       return buildUserNotFound(context);
     } else {
       return buildUserFound(context);
