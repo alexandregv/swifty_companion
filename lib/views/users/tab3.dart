@@ -51,10 +51,11 @@ class _Tab3State extends State<Tab3> with LoadingMixin<Tab3>, AutomaticKeepAlive
   }
 
   Widget buildBody(BuildContext context) {
-    return SingleChildScrollView(
+    return Center(
+      child: SingleChildScrollView(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center, // Center vertically
-          crossAxisAlignment: CrossAxisAlignment.start, // Align to left
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: () {
             if (_skillUsers.isEmpty) {
               return <Widget>[
@@ -69,6 +70,7 @@ class _Tab3State extends State<Tab3> with LoadingMixin<Tab3>, AutomaticKeepAlive
             }
           }(),
         )
+      )
     );
   }
 
