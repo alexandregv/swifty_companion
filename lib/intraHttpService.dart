@@ -54,14 +54,12 @@ class IntraHttpService {
           List<dynamic> arr = convert.jsonDecode(craftedBody);
           final nextPage = xPage + 1;
           final Uri nextUri = newUri.replace(
-            scheme: '',
-            host: '',
             queryParameters: {
               ...receivedUri.queryParameters,
               'page[number]': nextPage.toString(),
             },
           );
-          http.Response nextResponse = await getPages(nextUri.toString().substring(6));
+          http.Response nextResponse = await getPages(nextUri.path.split("/v2/")[1] + '?' + nextUri.query);
           arr.addAll(convert.jsonDecode(nextResponse.body));
           craftedBody = convert.jsonEncode(arr);
         }
