@@ -35,14 +35,18 @@ class _UsersPageState extends State<UsersPage> with LoadingMixin<UsersPage> {
   );
 
   Future <void> fetchUser(String login) async {
+    setState(() => loading = true);
     http.Response resp = await _helper.get("https://api.intra.42.fr/v2/users/${widget.login}");
     if (resp.statusCode == 200) {
       setState(() {
         _user = User.fromJson(json.decode(resp.body));
       });
+      setState(() => loading = false);
     } else if (resp.statusCode == 404) {
+      setState(() => loading = false);
       throw Exception("User not found");
     } else {
+      setState(() => loading = false);
       throw Exception("Error retrieving user");
     }
   }
@@ -90,7 +94,7 @@ class _UsersPageState extends State<UsersPage> with LoadingMixin<UsersPage> {
             actions: [
               IconButton(
                 icon: const Icon(Icons.refresh),
-                onPressed: () => fetchUser(widget.login),
+                onPressed: () async => await fetchUser(widget.login),
               ),
             ],
           ),
@@ -128,11 +132,7 @@ class _UsersPageState extends State<UsersPage> with LoadingMixin<UsersPage> {
           actions: [
             IconButton(
               icon: const Icon(Icons.refresh),
-              onPressed: () async {
-                setState(() => loading = true);
-                await fetchUser(widget.login);
-                setState(() => loading = false);
-              },
+              onPressed: () async => await fetchUser(widget.login),
             ),
           ],
           bottom: const TabBar(
@@ -144,14 +144,14 @@ class _UsersPageState extends State<UsersPage> with LoadingMixin<UsersPage> {
           ),
         ),
         resizeToAvoidBottomInset: false,
-          body: TabBarView(
-            physics: const NeverScrollableScrollPhysics(),
-            children: [
-              Tab1(helper: _helper, login: widget.login, user: _user),
-              Tab2(helper: _helper, login: widget.login),
-              Tab3(helper: _helper, login: widget.login, user: _user),
-            ],
-          ),
+        body: TabBarView(
+          physics: const NeverScrollableScrollPhysics(),
+          children: [
+            Tab1(helper: _helper, login: widget.login, user: _user),
+            Tab2(helper: _helper, login: widget.login),
+            Tab3(helper: _helper, login: widget.login, user: _user),
+          ],
+        ),
       ),
     );
   }
