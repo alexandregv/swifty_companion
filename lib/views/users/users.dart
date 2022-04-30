@@ -25,7 +25,7 @@ class UsersPage extends StatefulWidget {
 
 class _UsersPageState extends State<UsersPage> with LoadingMixin<UsersPage> {
   late final OAuth2Helper _helper;
-  late final User _user;
+  late User _user;
 
   final OAuth2Client client = OAuth2Client(
     authorizeUrl: 'https://api.intra.42.fr/oauth/authorize',
@@ -34,15 +34,7 @@ class _UsersPageState extends State<UsersPage> with LoadingMixin<UsersPage> {
     customUriScheme: 'my.flutterycompanion',
   );
 
-  @override
-  Future<void> load() async {
-    _helper = OAuth2Helper(client,
-        grantType: OAuth2Helper.AUTHORIZATION_CODE,
-        clientId: '<API_APP_CLIENT_ID>',
-        clientSecret: '<API_APP_CLIENT_SECRET>',
-        scopes: ['public', 'profile', 'projects'],
-    );
-
+  fetchUser(String login) async {
     http.Response resp = await _helper.get("https://api.intra.42.fr/v2/users/${widget.login}");
     if (resp.statusCode == 200) {
       setState(() {
@@ -53,6 +45,17 @@ class _UsersPageState extends State<UsersPage> with LoadingMixin<UsersPage> {
     } else {
       throw Exception("Error retrieving user");
     }
+  }
+
+  @override
+  Future<void> load() async {
+    _helper = OAuth2Helper(client,
+        grantType: OAuth2Helper.AUTHORIZATION_CODE,
+        clientId: '<API_APP_CLIENT_ID>',
+        clientSecret: '<API_APP_CLIENT_SECRET>',
+        scopes: ['public', 'profile', 'projects'],
+    );
+    await fetchUser(widget.login);
   }
 
   @override
@@ -84,6 +87,12 @@ class _UsersPageState extends State<UsersPage> with LoadingMixin<UsersPage> {
           appBar: AppBar(
             title: Text(widget.login),
             centerTitle: true,
+            actions: [
+              IconButton(
+                icon: const Icon(Icons.refresh),
+                onPressed: () => fetchUser(widget.login),
+              ),
+            ],
           ),
           resizeToAvoidBottomInset: false,
           body: Column(
@@ -116,6 +125,12 @@ class _UsersPageState extends State<UsersPage> with LoadingMixin<UsersPage> {
         appBar: AppBar(
           title: Text(widget.login),
           centerTitle: true,
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.refresh),
+              onPressed: () => fetchUser(widget.login),
+            ),
+          ],
           bottom: const TabBar(
             tabs: [
               Tab(icon: Icon(Icons.person)),
