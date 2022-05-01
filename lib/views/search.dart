@@ -54,6 +54,7 @@ class _SearchPageState extends State<SearchPage> {
                 onSubmitted: (String login) {
                   if (login.isNotEmpty) {
                     Navigator.pushNamed(context, '/users', arguments: login.toLowerCase());
+                    loginFieldController.clear();
                   }
                 },
                 inputFormatters: [
