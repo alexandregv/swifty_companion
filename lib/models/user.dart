@@ -25,9 +25,15 @@ class User {
   factory User.fromJson(Map<String, dynamic> json) {
     final String title = (){
       if (json["titles_users"] != null && (json["titles_users"] as List<dynamic>).isNotEmpty) {
-        final int titleUserId = (json["titles_users"] as List<dynamic>).firstWhere((tu) => tu["selected"] == true)["title_id"];
-        final String titleName = (json["titles"] as List<dynamic>).firstWhere((t) => t["id"] == titleUserId)["name"];
-        return titleName.replaceAll("%login", json["login"]);
+        final selectedTitleUser = (json["titles_users"] as List<dynamic>).firstWhere((tu) => tu["selected"] == true, orElse: () => null);
+        if (selectedTitleUser != null) {
+          final int titleUserId = (json["titles_users"] as List<dynamic>).firstWhere((tu) => tu["selected"] == true)["title_id"];
+          final selectedTitle = (json["titles"] as List<dynamic>).firstWhere((t) => t["id"] == titleUserId, orElse: () => null);
+          if (selectedTitle != null) {
+            final String titleName = (json["titles"] as List<dynamic>).firstWhere((t) => t["id"] == titleUserId)["name"];
+            return titleName.replaceAll("%login", json["login"]);
+          }
+        }
       }
       return "";
     }();
