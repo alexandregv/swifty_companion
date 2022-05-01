@@ -93,18 +93,52 @@ class _Tab1State extends State<Tab1> with AutomaticKeepAliveClientMixin<Tab1>{
       );
     }
 
+    List<Widget> unnamedUserInfos() {
+      return [
+        unnamedUserInfo("${widget.user.usualFirstName} ${widget.user.lastname.toUpperCase()}", style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+        if (widget.user.title.isNotEmpty) unnamedUserInfo(widget.user.title),
+        unnamedUserInfo(widget.user.email),
+        unnamedUserInfo(widget.user.location),
+        SizedBox(
+          height: 16,
+          width: MediaQuery.of(context).size.width - 20,
+          child: Stack(
+            children: <Widget>[
+              SizedBox.expand(
+                child: ClipRRect(
+                  borderRadius: const BorderRadius.all(Radius.circular(4)),
+                  child: LinearProgressIndicator(
+                    value: double.parse("0.${_level?.split('.')[1]}"),
+                    valueColor: const AlwaysStoppedAnimation<Color>(Colors.deepPurple),
+                    backgroundColor: Colors.grey[400],
+                    semanticsLabel: "Level",
+                    semanticsValue: _level!,
+                  ),
+                ),
+              ),
+              Center(
+                  child: Text(_level)
+              ),
+            ],
+          ),
+        ),
+      ];
+    }
+
+    List<Widget> namedUserInfos() {
+      return [
+        namedUserInfo('Wallet', widget.user.wallet.toString(), "₳"),
+        namedUserInfo('Evaluation points', widget.user.evaluationPoints.toString()),
+        namedUserInfo('Primary cursus', widget.user.primaryCursus?.cursus.name ?? 'No cursus'),
+        if (_pool != 'none') namedUserInfo('Pool', _pool),
+        if (widget.user.blackholedAt != null) namedUserInfo('Blackholed at', widget.user.blackholedAt!.toLocal().toString()),
+        if (widget.user.isStaff) namedUserInfo('Staff?', 'yes, panic'),
+      ];
+    }
+
     return [
-      unnamedUserInfo("${widget.user.usualFirstName} ${widget.user.lastname.toUpperCase()}", style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-      if (widget.user.title.isNotEmpty) unnamedUserInfo(widget.user.title),
-      unnamedUserInfo(widget.user.email),
-      unnamedUserInfo(widget.user.location),
-      namedUserInfo('Lvl', _level!.toString()),
-      namedUserInfo('Wallet', widget.user.wallet.toString(), "₳"),
-      namedUserInfo('Evaluation points', widget.user.evaluationPoints.toString()),
-      namedUserInfo('Primary cursus', widget.user.primaryCursus?.cursus.name ?? 'No cursus'),
-      if (_pool != 'none') namedUserInfo('Pool', _pool),
-      if (widget.user.blackholedAt != null) namedUserInfo('Blackholed at', widget.user.blackholedAt!.toLocal().toString()),
-      if (widget.user.isStaff) namedUserInfo('Staff?', 'yes, panic'),
+      ...unnamedUserInfos(),
+      ...namedUserInfos(),
     ];
   }
 }
