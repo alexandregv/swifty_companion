@@ -43,35 +43,57 @@ class _Tab1State extends State<Tab1> with AutomaticKeepAliveClientMixin<Tab1>{
       }
     }();
 
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        Container(
-          width: MediaQuery.of(context).size.width,
-          height: MediaQuery.of(context).size.width,
-          decoration: BoxDecoration(
-            image: DecorationImage(
-              fit: BoxFit.fill,
-              image: widget.userImage,
+    return SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            Container(
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.width,
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  fit: BoxFit.fill,
+                  image: widget.userImage,
+                ),
+              ),
             ),
-          ),
-        ),
-        userInfo('Full name', widget.user.usualFullName),
-        userInfo('E-mail', widget.user.email),
-        userInfo('Level', _level!),
-        userInfo('Location', widget.user.location),
-        userInfo('Pool', _pool),
-        if (widget.user.blackholedAt != null) userInfo('Blackoled at', widget.user.blackholedAt!.toLocal().toString()),
-        if (widget.user.isStaff) userInfo('Staff', 'yes, panic'),
-      ],
+            unnamedUserInfo("${widget.user.usualFirstName} ${widget.user.lastname.toUpperCase()}", style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+            if (widget.user.title.isNotEmpty) unnamedUserInfo(widget.user.title),
+            unnamedUserInfo(widget.user.email),
+            unnamedUserInfo(widget.user.location),
+            namedUserInfo('Lvl', _level!.toString()),
+            namedUserInfo('Wallet', widget.user.wallet.toString(), "₳"),
+            namedUserInfo('Evaluation points', widget.user.evaluationPoints.toString()),
+            namedUserInfo('Primary cursus', widget.user.primaryCursus?.cursus.name ?? 'No cursus'),
+            //userInfo('Pool', _pool),
+            if (widget.user.blackholedAt != null) namedUserInfo('Blackholed at', widget.user.blackholedAt!.toLocal().toString()),
+            if (widget.user.isStaff) namedUserInfo('Staff?', 'yes, panic'),
+          ],
+        )
     );
   }
 
-  Padding userInfo(String key, String value) {
+  Padding unnamedUserInfo(String value, {String? suffix = "", TextStyle? style = const TextStyle()}) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-      child: Text("$key: $value"),
+      child: Text(value + (suffix != null  && suffix.isNotEmpty ? " $suffix" : ""), style: style),
+    );
+  }
+  Padding namedUserInfo(String key, String value, [String? suffix]) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+      child: Text.rich(
+          TextSpan(
+              children: <TextSpan>[
+                TextSpan(text: key, style: const TextStyle(color: Colors.deepPurple)),
+                const TextSpan(text: " "),
+                TextSpan(text: value),
+                const TextSpan(text: " "),
+                TextSpan(text: suffix),
+              ]
+          )
+      ),
     );
   }
 }

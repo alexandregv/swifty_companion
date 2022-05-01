@@ -14,12 +14,24 @@ class User {
   final String poolMonth;
   final String poolYear;
   final bool isStaff;
+  final int wallet;
+  final int evaluationPoints;
+  final String title;
   late CursusUser? primaryCursus;
   late DateTime? blackholedAt;
 
-  User({required this.login, required this.firstname, required this.lastname, required this.usualFirstName , required this.usualFullName, required this.email, required this.location, required this.imageUrl, required this.newImageUrl, required this.cursusUsers, required this.poolMonth, required this.poolYear, required this.isStaff});
+  User({required this.login, required this.firstname, required this.lastname, required this.usualFirstName , required this.usualFullName, required this.email, required this.location, required this.imageUrl, required this.newImageUrl, required this.cursusUsers, required this.poolMonth, required this.poolYear, required this.isStaff, required this.wallet, required this.evaluationPoints, required this.title});
 
   factory User.fromJson(Map<String, dynamic> json) {
+    final String title = (){
+      if (json["titles_users"] != null && (json["titles_users"] as List<dynamic>).isNotEmpty) {
+        final int titleUserId = (json["titles_users"] as List<dynamic>).firstWhere((tu) => tu["selected"] == true)["title_id"];
+        final String titleName = (json["titles"] as List<dynamic>).firstWhere((t) => t["id"] == titleUserId)["name"];
+        return titleName.replaceAll("%login", json["login"]);
+      }
+      return "";
+    }();
+
     User user = User(
       login: json["login"],
       firstname: json["first_name"],
@@ -37,6 +49,9 @@ class User {
       poolMonth: json["pool_month"] ?? 'none',
       poolYear: json["pool_year"] ?? 'none',
       isStaff: json["staff?"] ?? false,
+      wallet: json["wallet"] ?? 0,
+      evaluationPoints: json["evaluation_points"] ?? 0,
+      title: title,
     );
 
     user.cursusUsers.sort((a, b) => a.id.compareTo(b.id));
