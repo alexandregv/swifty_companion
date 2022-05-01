@@ -33,7 +33,7 @@ class _Tab1State extends State<Tab1> with AutomaticKeepAliveClientMixin<Tab1>{
     final _level = widget.user.primaryCursus == null ? 'No cursus' : widget.user.primaryCursus?.level.toStringAsFixed(2);
     final _pool = () {
       if (widget.user.poolMonth == 'none' && widget.user.poolYear == 'none') {
-        return "none";
+        return 'none';
       } else if (widget.user.poolMonth == 'none' && widget.user.poolYear != 'none') {
         return widget.user.poolYear;
       } else if (widget.user.poolMonth != 'none' && widget.user.poolYear == 'none') {
@@ -66,7 +66,7 @@ class _Tab1State extends State<Tab1> with AutomaticKeepAliveClientMixin<Tab1>{
             namedUserInfo('Wallet', widget.user.wallet.toString(), "₳"),
             namedUserInfo('Evaluation points', widget.user.evaluationPoints.toString()),
             namedUserInfo('Primary cursus', widget.user.primaryCursus?.cursus.name ?? 'No cursus'),
-            //userInfo('Pool', _pool),
+            if (_pool != 'none') namedUserInfo('Pool', _pool),
             if (widget.user.blackholedAt != null) namedUserInfo('Blackholed at', widget.user.blackholedAt!.toLocal().toString()),
             if (widget.user.isStaff) namedUserInfo('Staff?', 'yes, panic'),
           ],
