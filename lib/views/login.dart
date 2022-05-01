@@ -3,26 +3,25 @@ import 'package:oauth2_client/oauth2_client.dart';
 import 'package:oauth2_client/oauth2_helper.dart';
 import 'package:swifty_companion/views/search.dart';
 
+import '../intra_http_service.dart';
+
 class LoginPage extends StatefulWidget {
-  const LoginPage({Key? key}) : super(key: key);
+  final IntraHttpService intraHttpService;
+
+  const LoginPage({
+    Key? key,
+    required this.intraHttpService,
+  }) : super(key: key);
 
   @override
   State<LoginPage> createState() => _LoginPageState();
 }
 
 class _LoginPageState extends State<LoginPage> {
-  late OAuth2Helper helper;
   String _tokenInfo = 'Waiting...';
 
-  final OAuth2Client client = OAuth2Client(
-    authorizeUrl: 'https://api.intra.42.fr/oauth/authorize',
-    tokenUrl: 'https://api.intra.42.fr/oauth/token',
-    redirectUri: 'my.flutterycompanion://oauth2redirect',
-    customUriScheme: 'my.flutterycompanion',
-  );
-
   void _initOAuth() async {
-    var tokenResp = await helper.getToken();
+    var tokenResp = await widget.intraHttpService.getToken();
     setState(() {
       _tokenInfo = tokenResp.toString();
     });
@@ -32,14 +31,6 @@ class _LoginPageState extends State<LoginPage> {
   void initState() {
     super.initState();
 
-    client.accessTokenRequestHeaders = {'Accept': 'application/json'};
-    helper = OAuth2Helper(
-      client,
-      grantType: OAuth2Helper.AUTHORIZATION_CODE,
-      clientId: '<API_APP_CLIENT_ID>',
-      clientSecret: '<API_APP_CLIENT_SECRET>',
-      scopes: ['public', 'profile', 'projects'],
-    );
     _initOAuth();
   }
 

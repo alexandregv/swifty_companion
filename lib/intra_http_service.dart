@@ -10,7 +10,6 @@ import 'models/user.dart';
 class IntraHttpService {
   final String _baseUrl = "https://api.intra.42.fr/v2/";
   late final OAuth2Helper _helper;
-  final http.Client _client = http.Client();
 
   final OAuth2Client client = OAuth2Client(
     authorizeUrl: 'https://api.intra.42.fr/oauth/authorize',
@@ -27,6 +26,10 @@ class IntraHttpService {
       clientSecret: '<API_APP_CLIENT_SECRET>',
       scopes: ['public', 'profile', 'projects'],
     );
+  }
+
+  Future<dynamic> getToken() async {
+   return _helper.getToken();
   }
 
   Future<dynamic> get(String route) async {

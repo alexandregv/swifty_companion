@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:swifty_companion/views/search.dart';
 import 'package:swifty_companion/views/users/users.dart';
 
+import 'intra_http_service.dart';
 import 'views/about.dart';
 import 'views/login.dart';
 
@@ -15,6 +16,8 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final IntraHttpService _intraHttpService = IntraHttpService();
+
     return MaterialApp(
       title: 'Fluttery Companion',
       theme: ThemeData(
@@ -29,11 +32,11 @@ class App extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       onGenerateRoute: (RouteSettings settings) {
         switch (settings.name) {
-          case '/':return CupertinoPageRoute(builder: (_) => const LoginPage(), settings: settings);
+          case '/':return CupertinoPageRoute(builder: (_) => LoginPage(intraHttpService: _intraHttpService), settings: settings);
           case '/search': return CupertinoPageRoute(builder: (_) => const SearchPage(), settings: settings);
           case '/about': return CupertinoPageRoute(builder: (_) => const AboutPage(), settings: settings);
-          case '/users': return CupertinoPageRoute(builder: (_) => UsersPage(login: settings.arguments as String,), settings: settings);
-          default: return CupertinoPageRoute(builder: (_) => const LoginPage(), settings: settings);
+          case '/users': return CupertinoPageRoute(builder: (_) => UsersPage(intraHttpService: _intraHttpService, login: settings.arguments as String,), settings: settings);
+          default: return CupertinoPageRoute(builder: (_) => LoginPage(intraHttpService: _intraHttpService), settings: settings);
         }
       },
     );
