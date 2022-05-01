@@ -108,7 +108,7 @@ class _Tab1State extends State<Tab1> with AutomaticKeepAliveClientMixin<Tab1>{
                 child: ClipRRect(
                   borderRadius: const BorderRadius.all(Radius.circular(4)),
                   child: LinearProgressIndicator(
-                    value: double.parse("0.${_level?.split('.')[1]}"),
+                    value: _level == 'No cursus' ? 0 : double.parse("0.${_level?.split('.')[1]}"),
                     valueColor: const AlwaysStoppedAnimation<Color>(Colors.deepPurple),
                     backgroundColor: Colors.grey[400],
                     semanticsLabel: "Level",
@@ -127,18 +127,37 @@ class _Tab1State extends State<Tab1> with AutomaticKeepAliveClientMixin<Tab1>{
 
     List<Widget> namedUserInfos() {
       return [
-        namedUserInfo('Wallet', widget.user.wallet.toString(), "₳"),
-        namedUserInfo('Evaluation points', widget.user.evaluationPoints.toString()),
-        namedUserInfo('Primary cursus', widget.user.primaryCursus?.cursus.name ?? 'No cursus'),
-        if (_pool != 'none') namedUserInfo('Pool', _pool),
-        if (widget.user.blackholedAt != null) namedUserInfo('Blackholed at', widget.user.blackholedAt!.toLocal().toString()),
-        if (widget.user.isStaff) namedUserInfo('Staff?', 'yes, panic'),
+        Column(
+          children: <Widget>[
+            namedUserInfo('Wallet', widget.user.wallet.toString(), "₳"),
+            namedUserInfo('Evaluation points', widget.user.evaluationPoints.toString()),
+          ],
+        ),
+        Column(
+          children: <Widget>[
+            namedUserInfo('Primary cursus', widget.user.primaryCursus?.cursus.name ?? 'No cursus'),
+            if (_pool != 'none') namedUserInfo('Pool', _pool),
+            if (widget.user.isStaff) namedUserInfo('Staff?', 'yes, panic'),
+          ],
+        ),
+      ];
+      return [
       ];
     }
 
     return [
-      ...unnamedUserInfos(),
-      ...namedUserInfos(),
+      Column(
+        children: unnamedUserInfos(),
+      ),
+      Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: namedUserInfos(),
+      ),
+      Column(
+          children: <Widget>[
+            if (widget.user.blackholedAt != null) namedUserInfo('Blackholed at', widget.user.blackholedAt!.toLocal().toString()),
+          ]
+      ),
     ];
   }
 }
