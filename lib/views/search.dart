@@ -9,7 +9,7 @@ class SearchPage extends StatefulWidget {
 }
 
 class _SearchPageState extends State<SearchPage> {
-  final loginFieldController= TextEditingController();
+  final loginFieldController = TextEditingController();
 
   @override
   void dispose() {
@@ -41,10 +41,9 @@ class _SearchPageState extends State<SearchPage> {
               padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
               child: Center(
                   child: Image(
-                    image: AssetImage("assets/images/42paris.png"),
-                    height: 150,
-                  )
-              ),
+                image: AssetImage("assets/images/42paris.png"),
+                height: 150,
+              )),
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
@@ -87,8 +86,6 @@ class _SearchPageState extends State<SearchPage> {
               ),
             ),
           ],
-        )
-    );
+        ));
   }
-
 }

@@ -1,10 +1,15 @@
-class Project{
+class Project {
   final int id;
   final int parentId;
   final String name;
   final String slug;
 
-  Project({required this.id, required this.parentId, required this.name, required this.slug});
+  Project({
+      required this.id,
+      required this.parentId,
+      required this.name,
+      required this.slug
+  });
 
   factory Project.fromJson(Map<String, dynamic> json) {
     Project project = Project(

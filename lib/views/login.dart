@@ -21,42 +21,42 @@ class _LoginPageState extends State<LoginPage> {
     customUriScheme: 'my.flutterycompanion',
   );
 
- void _initOAuth() async {
-   var tokenResp = await helper.getToken();
-   setState(() {
-     _tokenInfo = tokenResp.toString();
-   });
- }
+  void _initOAuth() async {
+    var tokenResp = await helper.getToken();
+    setState(() {
+      _tokenInfo = tokenResp.toString();
+    });
+  }
 
   @override
   void initState() {
     super.initState();
 
     client.accessTokenRequestHeaders = {'Accept': 'application/json'};
-    helper = OAuth2Helper(client,
-        grantType: OAuth2Helper.AUTHORIZATION_CODE,
-        clientId: '<API_APP_CLIENT_ID>',
-        clientSecret: '<API_APP_CLIENT_SECRET>',
-        scopes: ['public', 'profile', 'projects'],
+    helper = OAuth2Helper(
+      client,
+      grantType: OAuth2Helper.AUTHORIZATION_CODE,
+      clientId: '<API_APP_CLIENT_ID>',
+      clientSecret: '<API_APP_CLIENT_SECRET>',
+      scopes: ['public', 'profile', 'projects'],
     );
     _initOAuth();
   }
 
   @override
   Widget build(BuildContext context) {
-    if (_tokenInfo != 'Waiting...')  {
+    if (_tokenInfo != 'Waiting...') {
       return const SearchPage();
     }
 
     return Scaffold(
-        appBar: AppBar(
-          title: const Text('OAuth'),
-          centerTitle: true,
-        ),
+      appBar: AppBar(
+        title: const Text('OAuth'),
+        centerTitle: true,
+      ),
       body: Center(
-          child: Text('Token Info: ' + _tokenInfo),
+        child: Text('Token Info: ' + _tokenInfo),
       ),
     );
   }
-
 }

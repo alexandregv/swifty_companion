@@ -5,7 +5,11 @@ class Cursus {
   final String slug;
   final String name;
 
-  Cursus({required this.id, required this.name, required this.slug});
+  Cursus({
+    required this.id,
+    required this.name,
+    required this.slug
+  });
 
   factory Cursus.fromJson(Map<String, dynamic> json) {
     Cursus cursus = Cursus(

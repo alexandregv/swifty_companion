@@ -20,7 +20,8 @@ class IntraHttpService {
   );
 
   IntraHttpService() {
-    _helper = OAuth2Helper(client,
+    _helper = OAuth2Helper(
+      client,
       grantType: OAuth2Helper.AUTHORIZATION_CODE,
       clientId: '<API_APP_CLIENT_ID>',
       clientSecret: '<API_APP_CLIENT_SECRET>',
@@ -52,7 +53,9 @@ class IntraHttpService {
     if (response.statusCode == 200 && totalPages > 1) {
       String craftedBody = response.body;
 
-      if (response.headers["x-total"] != null && response.headers["x-per-page"] != null && response.headers["x-page"] != null) {
+      if (response.headers["x-total"] != null &&
+          response.headers["x-per-page"] != null &&
+          response.headers["x-page"] != null) {
         if (xPage <= totalPages) {
           List<dynamic> arr = convert.jsonDecode(craftedBody);
           final nextPage = xPage + 1;
@@ -82,7 +85,7 @@ class IntraHttpService {
   Future<User> getUser(String login) async {
     http.Response resp = await get("/users/$login");
     if (resp.statusCode == 200) {
-        return User.fromJson(convert.jsonDecode(resp.body));
+      return User.fromJson(convert.jsonDecode(resp.body));
     } else if (resp.statusCode == 404) {
       throw Exception("User not found");
     } else {

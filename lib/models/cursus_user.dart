@@ -8,7 +8,12 @@ class CursusUser {
   final List<SkillUser> skillUsers;
   late DateTime? blackholedAt;
 
-  CursusUser({required this.id, required this.cursus, required this.level, required this.skillUsers});
+  CursusUser({
+      required this.id,
+      required this.cursus,
+      required this.level,
+      required this.skillUsers
+  });
 
   factory CursusUser.fromJson(Map<String, dynamic> json) {
     CursusUser projectUser = CursusUser(

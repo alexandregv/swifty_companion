@@ -8,7 +8,14 @@ class ProjectUser {
   final bool validated;
   final Project project;
 
-  ProjectUser({required this.id, required this.occurrence, required this.finalMark, required this.status, required this.validated, required this.project});
+  ProjectUser({
+      required this.id,
+      required this.occurrence,
+      required this.finalMark,
+      required this.status,
+      required this.validated,
+      required this.project
+  });
 
   factory ProjectUser.fromJson(Map<String, dynamic> json) {
     ProjectUser projectUser = ProjectUser(

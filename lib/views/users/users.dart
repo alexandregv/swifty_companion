@@ -27,7 +27,7 @@ class _UsersPageState extends State<UsersPage> with LoadingMixin<UsersPage> {
   late User _user;
   ImageProvider _userImage = const NetworkImage("https://cdn.intra.42.fr/users/medium_default.jpg");
 
-  Future <void> refreshUser() async {
+  Future<void> refreshUser() async {
     setState(() => loading = true);
     final User user = await _intraHttpService.getUser(widget.login);
     setState(() {
@@ -36,7 +36,7 @@ class _UsersPageState extends State<UsersPage> with LoadingMixin<UsersPage> {
     });
   }
 
-  Future <void> refreshUserImage(User user) async {
+  Future<void> refreshUserImage(User user) async {
     setState(() => loading = true);
     final ImageProvider img = await _intraHttpService.getUserImage(_user);
     setState(() {
@@ -67,52 +67,51 @@ class _UsersPageState extends State<UsersPage> with LoadingMixin<UsersPage> {
   }
 
   Widget buildLoader(BuildContext context) {
-   return Scaffold(
-     appBar: AppBar(
-       title: Text(widget.login),
-       centerTitle: true,
-     ),
-     resizeToAvoidBottomInset: false,
-     body: const Center(
-       child: CircularProgressIndicator(),
-     ),
-   );
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(widget.login),
+        centerTitle: true,
+      ),
+      resizeToAvoidBottomInset: false,
+      body: const Center(
+        child: CircularProgressIndicator(),
+      ),
+    );
   }
 
   Widget buildUserNotFound(BuildContext context) {
     return Scaffold(
-          appBar: AppBar(
-            title: Text(widget.login),
-            centerTitle: true,
-            actions: [
-              IconButton(
-                icon: const Icon(Icons.refresh),
-                onPressed: () => refreshUser(),
-              ),
-            ],
-          ),
-          resizeToAvoidBottomInset: false,
-          body: Column(
-            mainAxisAlignment: MainAxisAlignment.center, // Center vertically
-            crossAxisAlignment: CrossAxisAlignment.start, // Align to left
-            children: <Widget>[
-              Center(
-                child: Text("User ${widget.login} not found."),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-                child: ElevatedButton.icon(
-                  onPressed: () => Navigator.pop(context),
-                  icon: const Icon(Icons.arrow_back),
-                  label: const Text('Go back'),
-                  style: ElevatedButton.styleFrom(
-                    minimumSize: const Size.fromHeight(40),
-                  ),
+        appBar: AppBar(
+          title: Text(widget.login),
+          centerTitle: true,
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.refresh),
+              onPressed: () => refreshUser(),
+            ),
+          ],
+        ),
+        resizeToAvoidBottomInset: false,
+        body: Column(
+          mainAxisAlignment: MainAxisAlignment.center, // Center vertically
+          crossAxisAlignment: CrossAxisAlignment.start, // Align to left
+          children: <Widget>[
+            Center(
+              child: Text("User ${widget.login} not found."),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+              child: ElevatedButton.icon(
+                onPressed: () => Navigator.pop(context),
+                icon: const Icon(Icons.arrow_back),
+                label: const Text('Go back'),
+                style: ElevatedButton.styleFrom(
+                  minimumSize: const Size.fromHeight(40),
                 ),
               ),
-            ],
-          )
-      );
+            ),
+          ],
+        ));
   }
 
   Widget buildUserFound(BuildContext context) {

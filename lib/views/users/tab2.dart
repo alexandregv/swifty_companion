@@ -58,26 +58,24 @@ class _Tab2State extends State<Tab2> with LoadingMixin<Tab2>, AutomaticKeepAlive
 
   Widget buildBody(BuildContext context) {
     return Center(
-      child: SingleChildScrollView(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: () {
-            if (_projectsUsers.isEmpty) {
-              return <Widget>[
-                const Center(child: Text('User has no projects')),
-              ];
-            } else {
-              _projectsUsers.sort((a, b) => a.id.compareTo(b.id));
-              return <Widget>[
-                for (ProjectUser projectUser in _projectsUsers)
-                  projectInfo(context, projectUser),
-              ];
-            }
-          }(),
-        )
-      )
-    );
+        child: SingleChildScrollView(
+            child: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: () {
+        if (_projectsUsers.isEmpty) {
+          return <Widget>[
+            const Center(child: Text('User has no projects')),
+          ];
+        } else {
+          _projectsUsers.sort((a, b) => a.id.compareTo(b.id));
+          return <Widget>[
+            for (ProjectUser projectUser in _projectsUsers)
+              projectInfo(context, projectUser),
+          ];
+        }
+      }(),
+    )));
   }
 
   Padding projectInfo(BuildContext context, ProjectUser projectUser) {

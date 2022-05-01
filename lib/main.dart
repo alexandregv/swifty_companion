@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:swifty_companion/views/search.dart';
 import 'package:swifty_companion/views/users/users.dart';
 
-
 import 'views/about.dart';
 import 'views/login.dart';
 
@@ -25,9 +24,7 @@ class App extends StatelessWidget {
         brightness: Brightness.dark,
         primarySwatch: Colors.deepPurple,
         primaryColor: Colors.deepPurple,
-        appBarTheme: const AppBarTheme(
-          backgroundColor: Colors.deepPurple
-        ),
+        appBarTheme: const AppBarTheme(backgroundColor: Colors.deepPurple),
       ),
       debugShowCheckedModeBanner: false,
       onGenerateRoute: (RouteSettings settings) {

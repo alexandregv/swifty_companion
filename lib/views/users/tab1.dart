@@ -22,7 +22,7 @@ class Tab1 extends StatefulWidget {
   State<Tab1> createState() => _Tab1State();
 }
 
-class _Tab1State extends State<Tab1> with AutomaticKeepAliveClientMixin<Tab1>{
+class _Tab1State extends State<Tab1> with AutomaticKeepAliveClientMixin<Tab1> {
   @override
   bool get wantKeepAlive => true;
 
@@ -32,14 +32,13 @@ class _Tab1State extends State<Tab1> with AutomaticKeepAliveClientMixin<Tab1>{
 
     return SingleChildScrollView(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            userImage(context),
-            ...userInfos(),
-          ],
-        )
-    );
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: <Widget>[
+        userImage(context),
+        ...userInfos(),
+      ],
+    ));
   }
 
   Container userImage(BuildContext context) {
@@ -56,7 +55,9 @@ class _Tab1State extends State<Tab1> with AutomaticKeepAliveClientMixin<Tab1>{
   }
 
   List<Widget> userInfos() {
-    final _level = widget.user.primaryCursus == null ? 'No cursus' : widget.user.primaryCursus?.level.toStringAsFixed(2);
+    final _level = widget.user.primaryCursus == null
+        ? 'No cursus'
+        : widget.user.primaryCursus?.level.toStringAsFixed(2);
     final _pool = () {
       if (widget.user.poolMonth == 'none' && widget.user.poolYear == 'none') {
         return 'none';
@@ -72,30 +73,31 @@ class _Tab1State extends State<Tab1> with AutomaticKeepAliveClientMixin<Tab1>{
     Padding unnamedUserInfo(String value, {String? suffix = "", TextStyle? style = const TextStyle()}) {
       return Padding(
         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-        child: Text(value + (suffix != null  && suffix.isNotEmpty ? " $suffix" : ""), style: style),
+        child: Text(
+            value + (suffix != null && suffix.isNotEmpty ? " $suffix" : ""),
+            style: style),
       );
     }
 
     Padding namedUserInfo(String key, String value, [String? suffix]) {
       return Padding(
         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-        child: Text.rich(
-            TextSpan(
-                children: <TextSpan>[
-                  TextSpan(text: key, style: const TextStyle(color: Colors.deepPurple)),
-                  const TextSpan(text: " "),
-                  TextSpan(text: value),
-                  const TextSpan(text: " "),
-                  TextSpan(text: suffix),
-                ]
-            )
-        ),
+        child: Text.rich(TextSpan(children: <TextSpan>[
+          TextSpan(text: key, style: const TextStyle(color: Colors.deepPurple)),
+          const TextSpan(text: " "),
+          TextSpan(text: value),
+          const TextSpan(text: " "),
+          TextSpan(text: suffix),
+        ])),
       );
     }
 
     List<Widget> unnamedUserInfos() {
       return [
-        unnamedUserInfo("${widget.user.usualFirstName} ${widget.user.lastname.toUpperCase()}", style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+        unnamedUserInfo(
+            "${widget.user.usualFirstName} ${widget.user.lastname.toUpperCase()}",
+            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)
+        ),
         if (widget.user.title.isNotEmpty) unnamedUserInfo(widget.user.title),
         unnamedUserInfo(widget.user.email),
         unnamedUserInfo(widget.user.location),
@@ -108,8 +110,11 @@ class _Tab1State extends State<Tab1> with AutomaticKeepAliveClientMixin<Tab1>{
                 child: ClipRRect(
                   borderRadius: const BorderRadius.all(Radius.circular(4)),
                   child: LinearProgressIndicator(
-                    value: _level == 'No cursus' ? 0 : double.parse("0.${_level?.split('.')[1]}"),
-                    valueColor: const AlwaysStoppedAnimation<Color>(Colors.deepPurple),
+                    value: _level == 'No cursus'
+                        ? 0
+                        : double.parse("0.${_level?.split('.')[1]}"),
+                    valueColor:
+                        const AlwaysStoppedAnimation<Color>(Colors.deepPurple),
                     backgroundColor: Colors.grey[400],
                     semanticsLabel: "Level",
                     semanticsValue: _level!,
@@ -141,8 +146,7 @@ class _Tab1State extends State<Tab1> with AutomaticKeepAliveClientMixin<Tab1>{
           ],
         ),
       ];
-      return [
-      ];
+      return [];
     }
 
     return [

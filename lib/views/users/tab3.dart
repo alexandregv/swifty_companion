@@ -52,26 +52,24 @@ class _Tab3State extends State<Tab3> with LoadingMixin<Tab3>, AutomaticKeepAlive
 
   Widget buildBody(BuildContext context) {
     return Center(
-      child: SingleChildScrollView(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: () {
-            if (_skillUsers.isEmpty) {
-              return <Widget>[
-                const Center(child: Text('User has no experiences')),
-              ];
-            } else {
-              _skillUsers.sort((a, b) => b.level.compareTo(a.level));
-              return <Widget>[
-                for (SkillUser skillUser in _skillUsers)
-                  skillUserInfo(context, skillUser),
-              ];
-            }
-          }(),
-        )
-      )
-    );
+        child: SingleChildScrollView(
+            child: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: () {
+        if (_skillUsers.isEmpty) {
+          return <Widget>[
+            const Center(child: Text('User has no experiences')),
+          ];
+        } else {
+          _skillUsers.sort((a, b) => b.level.compareTo(a.level));
+          return <Widget>[
+            for (SkillUser skillUser in _skillUsers)
+              skillUserInfo(context, skillUser),
+          ];
+        }
+      }(),
+    )));
   }
 
   Padding skillUserInfo(BuildContext context, SkillUser skillUser) {
