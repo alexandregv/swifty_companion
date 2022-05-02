@@ -32,8 +32,17 @@ class IntraHttpService {
    return _helper.getToken();
   }
 
-  Future<dynamic> get(String route) async {
+  Future<dynamic> get(String route, {retryCount = 0}) async {
     http.Response response = await _helper.get(_baseUrl + route);
+    if (response.statusCode == 429) {
+      if (retryCount > 3) {
+        throw Exception("Rate limit exceeded, too many retries (3).");
+      }
+      final int retryAfter = int.parse(response.headers['retry-after'] ?? '1');
+      await Future.delayed(Duration(seconds: retryAfter));
+      return get(route, retryCount: retryCount + 1);
+    }
+
     return response;
   }
 
