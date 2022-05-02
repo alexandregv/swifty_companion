@@ -11,6 +11,8 @@ class IntraHttpService {
   final String _baseUrl = "https://api.intra.42.fr/v2/";
   late final OAuth2Helper _helper;
 
+  int retryCount = 0;
+
   final OAuth2Client client = OAuth2Client(
     authorizeUrl: 'https://api.intra.42.fr/oauth/authorize',
     tokenUrl: 'https://api.intra.42.fr/oauth/token',
@@ -32,16 +34,19 @@ class IntraHttpService {
    return _helper.getToken();
   }
 
-  Future<dynamic> get(String route, {retryCount = 0}) async {
+  Future<dynamic> get(String route) async {
     http.Response response = await _helper.get(_baseUrl + route);
     if (response.statusCode == 429) {
       if (retryCount > 3) {
-        throw Exception("Rate limit exceeded, too many retries (3).");
+        retryCount = 0;
+        return response;
       }
       final int retryAfter = int.parse(response.headers['retry-after'] ?? '1');
       await Future.delayed(Duration(seconds: retryAfter));
-      return get(route, retryCount: retryCount + 1);
+      retryCount++;
+      return get(route);
     }
+    retryCount = 0;
 
     return response;
   }
