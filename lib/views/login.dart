@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:oauth2_client/oauth2_client.dart';
-import 'package:oauth2_client/oauth2_helper.dart';
 import 'package:swifty_companion/views/search.dart';
 
 import '../intra_http_service.dart';
