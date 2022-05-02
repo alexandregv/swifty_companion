@@ -113,16 +113,15 @@ class _Tab1State extends State<Tab1> with AutomaticKeepAliveClientMixin<Tab1> {
                     value: _level == 'No cursus'
                         ? 0
                         : double.parse("0.${_level?.split('.')[1]}"),
-                    valueColor:
-                        const AlwaysStoppedAnimation<Color>(Colors.deepPurple),
-                    backgroundColor: Colors.grey[400],
+                    valueColor: const AlwaysStoppedAnimation<Color>(Colors.deepPurple),
+                    backgroundColor: Colors.grey[600],
                     semanticsLabel: "Level",
                     semanticsValue: _level!,
                   ),
                 ),
               ),
               Center(
-                  child: Text(_level)
+                  child: Text(_level, style: const TextStyle(color: Colors.white),)
               ),
             ],
           ),
