@@ -15,3 +15,9 @@ The app handles light and dark themes, and is responsive.
 ![About view](./docs/images/about_dark.jpg "About view [dark theme]")
 ![Search view light theme](./docs/images/search_light.jpg "Search view [light theme]")
 ![User view light theme](./docs/images/user_light.jpg "User view [light theme]")
+
+
+### Build and run
+
+You will need the Android and Flutter SDKs, plus an API app of 42's intranet.  
+Fill you app credentials in `lib/intra_http_service.dart`, and then build with `flutter build`.
