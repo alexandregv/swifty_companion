@@ -20,4 +20,5 @@ The app handles light and dark themes, and is responsive.
 
 ### Build and run
 You will need the Android and Flutter SDKs, plus an API app of 42's intranet.  
-Fill you app credentials in `lib/intra_http_service.dart`, and then build with `flutter build`.
+Fill your app credentials in `lib/intra_http_service.dart`, and then build with `flutter build`.  
+You can run it on a usb-connected mobile with `flutter run` or `flutter run -d '<device-name>'`.  
